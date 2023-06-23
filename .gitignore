@@ -1,0 +1,3 @@
+# Ignorer tous les fichiers texte
+*txt
+*node_modules

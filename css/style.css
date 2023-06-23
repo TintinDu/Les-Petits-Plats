@@ -1,0 +1,33 @@
+body {
+  font-family: "Anton", sans-serif;
+  color: #000000;
+}
+
+#header {
+  position: absolute;
+  top: 3em;
+  left: 4em;
+}
+
+.header__title {
+  opacity: 0;
+}
+
+.header__logo {
+  width: 207px;
+  height: 25px;
+}
+
+.banner {
+  background-image: url("../images/banner.png");
+  background-size: cover;
+  height: 600px;
+  width: 100%;
+  display: flex;
+}
+
+.welcome-text {
+  margin: 6em 16em;
+  color: #ffd15b;
+  text-align: center;
+}

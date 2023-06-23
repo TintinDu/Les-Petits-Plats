@@ -1,0 +1,33 @@
+{
+  "name": "les-petits-plats",
+  "version": "1.0.0",
+  "description": "## Démarrer le projet",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext .html,.js,.json --max-warnings=0 .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "gitHooks": {
+    "pre-push": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TintinDu/Les-Petits-Plats.git"
+  },
+  "author": "Martin DUBOIS",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TintinDu/Les-Petits-Plats/issues"
+  },
+  "homepage": "https://github.com/TintinDu/Les-Petits-Plats#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.39.0",
+    "eslint-plugin-html": "^7.1.0",
+    "eslint-plugin-json": "^3.1.0",
+    "yorkie": "^2.0.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.0"
+  }
+}

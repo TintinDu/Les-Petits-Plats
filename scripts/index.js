@@ -2,6 +2,8 @@
 // rester bien sur des tableaux
 // pour chaque fonction lui passer les arguments et ne pas avoir plein de tableaux stockés en global
 
+import getRecipeCardDom from "./factories/recipeCardFactory.js";
+
 async function getRecipes() {
 
   const response = await fetch("./data/recipes.json");
@@ -10,9 +12,19 @@ async function getRecipes() {
   return data;
 }
 
-async function displayRecipes() {
-  const recipes = await getRecipes();
-  console.log(recipes);
+async function displayRecipes(recipes) {
+  const recipesSection = document.querySelector(".recipes-section");
+
+  recipes.map((recipe) => {
+    const recipeCardDom = getRecipeCardDom(recipe);
+    recipesSection.appendChild(recipeCardDom);
+  });
+
 }
 
-displayRecipes();
+async function initializeRecipes() {
+  const recipes = await getRecipes();
+  displayRecipes(recipes);
+}
+
+initializeRecipes();

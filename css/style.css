@@ -1,6 +1,7 @@
 body {
   font-family: "Anton", sans-serif;
   color: #000000;
+  max-width: 1440px;
 }
 
 #header {
@@ -30,4 +31,23 @@ body {
   margin: 6em 16em;
   color: #ffd15b;
   text-align: center;
+}
+
+.recipes-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10em;
+  margin-top: 4em;
+}
+
+.recipes-section article {
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.recipe-article {
+  height: 300px;
 }

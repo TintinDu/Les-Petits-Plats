@@ -30,7 +30,7 @@ const getRecipeCardDom = recipes => {
 
   const recipeTime = document.createElement('p');
   recipeTime.className = "recipe-time";
-  recipeTime.textContent = `${time} min`;
+  recipeTime.textContent = `${time}min`;
 
   const recipeTextTitle = document.createElement('h4');
   recipeTextTitle.className = "recipe-mini-title";
@@ -48,13 +48,13 @@ const getRecipeCardDom = recipes => {
   article.appendChild(divTime);
   article.appendChild(recipeContentDiv);
   recipeContentDiv.appendChild(recipeTitle);
+  recipeContentDiv.appendChild(recipeTextTitle);
   recipeContentDiv.appendChild(divRecipe);
+  recipeContentDiv.appendChild(recipeIngredientsTitle);
   recipeContentDiv.appendChild(divIngredients);
 
   divPhoto.appendChild(recipePhoto);
-  divRecipe.appendChild(recipeTextTitle);
   divRecipe.appendChild(recipeText);
-  divIngredients.appendChild(recipeIngredientsTitle);
   divTime.appendChild(recipeTime);
 
   ingredients.forEach((ingredient) => {
@@ -68,16 +68,10 @@ const getRecipeCardDom = recipes => {
     ingredientRecette.setAttribute("class","ingredient");
     ingredientRecette.textContent = ingredient.ingredient;
 
-    const quantity = document.createElement('p');
-    divIngredient.appendChild(quantity);
-    quantity.setAttribute("class","quantity-unit");
-    quantity.textContent = ingredient.quantity;
-
-    const unit = document.createElement('p');
-    divIngredient.appendChild(unit);
-    unit.setAttribute("class","quantity");
-    unit.textContent = ingredient.unit;
-
+    const ingredientQuantity = document.createElement('p');
+    divIngredient.appendChild(ingredientQuantity);
+    ingredientQuantity.setAttribute("class","ingredient-quantity");
+    ingredient.unit? ingredientQuantity.textContent = `${ingredient.quantity} ${ingredient.unit}` : ingredientQuantity.textContent = ingredient.quantity;
   });
   return (article);
 };

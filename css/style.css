@@ -6,17 +6,20 @@ body {
 
 h1,
 h2,
-h3,
-h4 {
+h3 {
   font-family: "Anton", sans-serif;
 }
 
 h3 {
   font-size: 18px;
+  margin-bottom: 1.5em;
 }
 
 h4 {
+  color: grey;
   font-size: 12px;
+  margin: 1em 0;
+  letter-spacing: 1px;
 }
 
 #header {
@@ -53,31 +56,40 @@ h4 {
 }
 
 .recipes-filters {
-  margin-bottom: 5em;
+  margin: 0 2em;
 }
 
 .flex-space-between {
   display: flex;
   justify-content: space-between;
+  padding: 1em;
+  margin-bottom: 2em;
+}
+
+.recipes-numbers {
+  font-size: 21px;
 }
 
 .recipes-section {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 10em;
+  gap: 4em 0em;
 }
 
-.recipes-section article {
-  justify-self: center;
-  display: flex;
-  flex-direction: column;
+.recipes-title-hidden {
+  opacity: 0;
+  position: absolute;
 }
 
 .recipe-article {
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
   width: 380px;
   height: 731px;
   background-color: white;
   border-radius: 15px;
+  box-shadow: 1px 15px 15px grey;
 }
 
 .recipe-article p {
@@ -97,34 +109,51 @@ h4 {
 }
 
 .recipe-content {
-  padding: 1em;
+  padding: 0.5em 1em;
+  margin: 1em;
 }
 
 .div-ingredient {
   display: flex;
+  flex-direction: column;
+  width: 175px;
+}
+
+.container__recipe-ingredients {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: minmax(70px, auto);
 }
 
 .recipe-description {
   width: 330px;
   height: 76px;
-  margin-left: 10px;
-  font-size: 11px;
-  line-height: 15px;
+  line-height: 19px;
   overflow: hidden;
+  font-weight: 400;
   text-overflow: ellipsis;
-  margin-top: 1px;
+  margin-bottom: 2em;
+}
+
+.container__recipe-time {
+  width: 65px;
+  height: 26px;
+  position: relative;
+  background: #ffd15b;
+  border-radius: 10px;
+  padding: 3px 0px 0px 10px;
+  bottom: 240px;
+  left: 300px;
 }
 
 .ingredient {
-  font-weight: bold;
-  height: 12px;
+  margin: 0;
   white-space: nowrap;
 }
 
-.quantity-unit {
-  margin-left: 5px;
-  margin-bottom: 0;
-  margin-top: 1px;
+.ingredient-quantity {
+  margin: 0;
+  color: grey;
 }
 
 .quantity {

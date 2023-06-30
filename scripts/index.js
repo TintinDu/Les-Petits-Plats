@@ -3,6 +3,7 @@
 // pour chaque fonction lui passer les arguments et ne pas avoir plein de tableaux stockés en global
 
 import getRecipeCardDom from "./factories/recipeCardFactory.js";
+import getRecipesNumbers from "./pages/index.js";
 
 async function getRecipes() {
 
@@ -25,6 +26,7 @@ async function displayRecipes(recipes) {
 async function initializeRecipes() {
   const recipes = await getRecipes();
   displayRecipes(recipes);
+  getRecipesNumbers(recipes);
 }
 
 initializeRecipes();

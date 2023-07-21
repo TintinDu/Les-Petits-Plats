@@ -203,6 +203,13 @@ div.ustensileTag {
   z-index: 1;
 }
 
+.filterList p {
+  width: 100%;
+}
+.filterList p:hover {
+  background-color: #ffd15b;
+}
+
 #filterIngredients,
 #filterIngredients .filterList {
   color: black;

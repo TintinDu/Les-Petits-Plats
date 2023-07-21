@@ -7,17 +7,53 @@ const searchBtn = document.querySelector('.searchBtn');
 // pas d'export, le contrôleur import et appelle les fonctions
 
 const recipes =  await service.getRecipes();
+let ingredients = [];
+let ustensils = [];
+let appliances = [];
+
 let word;
 
 const initializeRecipes = async (recipes) => {
   service.displayRecipes(recipes);
   service.getRecipesNumbers(recipes);
-  service.getIngredientsList(recipes);
+  ingredients = service.getIngredientsList(recipes);
+  ustensils = service.getUstensilsList(recipes);
+  appliances = service.getAppliancesList(recipes);
 
   return recipes;
 };
 
+const initializeIngredients = async (ingredients) => {
+  ingredients.map((ingredient) => {
+    const p = document.createElement("p");
+    p.innerText = ingredient;
+    document.querySelector("#ingredientsList").appendChild(p);
+
+  });
+};
+
+const initializeAppliances = async (appliances) => {
+  appliances.map((appliance) => {
+    const p = document.createElement("p");
+    p.innerText = appliance;
+    document.querySelector("#devicesList").appendChild(p);
+
+  });
+};
+
+const initializeUstensils = async (ustensils) => {
+  ustensils.map((ustensile) => {
+    const p = document.createElement("p");
+    p.innerText = ustensile;
+    document.querySelector("#ustensilesList").appendChild(p);
+
+  });
+};
+
 initializeRecipes(recipes);
+initializeIngredients(ingredients);
+initializeAppliances(appliances);
+initializeUstensils(ustensils);
 
 const filterWithName = (word, recipe) => {
   return recipe.name.toLowerCase().includes(word);

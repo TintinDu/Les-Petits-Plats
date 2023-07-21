@@ -1,6 +1,9 @@
 import service from "../models/service.js";
 
 const searchBar = document.querySelector('#search');
+const noResultsDiv = document.querySelector(".noResults");
+const recipesSection = document.querySelector('.recipes-section');
+const searchBtn = document.querySelector('.searchBtn');
 // pas d'export, le contrôleur import et appelle les fonctions
 
 const recipes =  await service.getRecipes();
@@ -9,6 +12,7 @@ let word;
 const initializeRecipes = async (recipes) => {
   service.displayRecipes(recipes);
   service.getRecipesNumbers(recipes);
+  service.getIngredientsList(recipes);
 
   return recipes;
 };
@@ -31,12 +35,27 @@ const filterWithIngredients = (word, recipe) => {
   return results;
 };
 
+// const filterWithTags = () => {
+
+// };
+
+const noResults = (word) => {
+  noResultsDiv.setAttribute("class","noResults");
+  noResultsDiv.textContent = `Aucune recette ne contient ${word}. Vous pouvez chercher «tarte aux pommes» , «poisson»`;
+};
+
 
 const search = () => {
   let results = [];
+  noResultsDiv.textContent = "";
 
+  if (searchBar.value.length < 3) {
+    noResultsDiv.textContent = "";
+    initializeRecipes(recipes);
+  }
   if (searchBar.value.length >= 3){
-    document.querySelector('.recipes-section').innerHTML = "";
+    noResultsDiv.textContent = "";
+    recipesSection.innerHTML = "";
     word = searchBar.value;
     recipes.map((recipe) => {
 
@@ -45,12 +64,72 @@ const search = () => {
       }
     });
     initializeRecipes(results);
-    console.log(results);
   }
-
+  if(results.length === 0) {
+    noResults(word);
+    word = searchBar.value;
+  }
+  if(searchBar.value.length < 3) {
+    noResultsDiv.textContent = "";
+  }
 };
 
 searchBar.addEventListener('keyup', search);
+searchBtn.addEventListener('click', search);
+
+document.querySelector("#displayIngredientsList").addEventListener("click", () =>{
+  toggleFiltersList("ingredients", "display");
+});
+document.querySelector("#hideIngredientsList").addEventListener("click", () =>{
+  toggleFiltersList("ingredients", "hide");
+});
+document.querySelector("#displayDevicesList").addEventListener("click", () =>{
+  toggleFiltersList("devices", "display");
+});
+document.querySelector("#hideDevicesList").addEventListener("click", () =>{
+  toggleFiltersList("devices", "hide");
+});
+document.querySelector("#displayUstensilesList").addEventListener("click", () =>{
+  toggleFiltersList("ustensiles", "display");
+});
+document.querySelector("#hideUstensilesList").addEventListener("click", () =>{
+  toggleFiltersList("ustensiles", "hide");
+});
+
+function toggleFiltersList(block, action) {
+  switch (block) {
+    case "ingredients":
+
+      if (action === "display") {
+        document.getElementById("filterIngredients").classList.add("active");
+        document.getElementById("filterDevices").classList.remove("active");
+        document.getElementById("filterUstensiles").classList.remove("active");
+      }else if(action === "hide"){
+        document.getElementById("filterIngredients").classList.remove("active");
+      }
+      break;
+    case "devices":
+
+      if (action === "display") {
+        document.getElementById("filterDevices").classList.add("active");
+        document.getElementById("filterIngredients").classList.remove("active");
+        document.getElementById("filterUstensiles").classList.remove("active");
+      }else if(action === "hide"){
+        document.getElementById("filterDevices").classList.remove("active");
+      }
+      break;
+    case "ustensiles":
+
+      if (action === "display") {
+        document.getElementById("filterUstensiles").classList.add("active");
+        document.getElementById("filterIngredients").classList.remove("active");
+        document.getElementById("filterDevices").classList.remove("active");
+      }else if(action === "hide"){
+        document.getElementById("filterUstensiles").classList.remove("active");
+      }
+      break;
+  }
+}
 
 
 

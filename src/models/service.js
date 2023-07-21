@@ -39,29 +39,60 @@ const getRecipesNumbers = (recipes) => {
 };
 
 const getIngredientsList = (recipes) => {
+  let ingredients = [];
 
-  const ingredients = recipes.map((recipe) => {
+  const ingredientLists = recipes.map((recipe) => {
     return recipe.ingredients;
   });
 
-  // const ingredientsArr = ingredients.map((ingredient) => {
-  //   console.log(ingredient.ingredient);
-  // });
+  ingredientLists.map((ingredientList) => {
+    ingredientList.map((ingredient) => {
+      if (!ingredients.includes(ingredient.ingredient)) {
+        ingredients.push(ingredient.ingredient);
+      }
+    });
+  });
 
-  console.log(ingredients);
+  return ingredients;
 };
-// const getUstensilsList = (recipes) => {
 
-// };
-// const getDevicesList = (recipes) => {
+const getUstensilsList = (recipes) => {
+  let ustensiles = [];
 
-// };
+  const ustensileLists = recipes.map((recipe) => {
+    return recipe.ustensils;
+  });
+
+  ustensileLists.map((ustensileList) => {
+    ustensileList.map((ustensile) => {
+      if (!ustensiles.includes(ustensile)) {
+        ustensiles.push(ustensile);
+      }
+    });
+  });
+
+  return ustensiles;
+};
+
+const getAppliancesList = (recipes) => {
+  let appliances = [];
+
+  recipes.map((recipe) => {
+    if (!appliances.includes(recipe.appliance)) {
+      appliances.push(recipe.appliance);
+    }
+  });
+
+  return appliances;
+};
 
 const service =  {
   getRecipes,
   displayRecipes,
   getRecipesNumbers,
   getIngredientsList,
+  getUstensilsList,
+  getAppliancesList,
 };
 
 export default service;

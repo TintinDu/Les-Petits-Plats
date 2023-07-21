@@ -2,7 +2,6 @@ const getRecipeCardDom = recipes => {
   // eslint-disable-next-line no-unused-vars
   const { image, appliance, description, id, ingredients, name, servings, time, ustensils } = recipes;
 
-  console.log(recipes);
   const photoPath = `images/${image}`;
 
   const article = document.createElement('article');

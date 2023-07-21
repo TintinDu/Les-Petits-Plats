@@ -38,11 +38,30 @@ const getRecipesNumbers = (recipes) => {
   numbersHeader.textContent = `${recipes.length} RECETTES`;
 };
 
+const getIngredientsList = (recipes) => {
+
+  const ingredients = recipes.map((recipe) => {
+    return recipe.ingredients;
+  });
+
+  // const ingredientsArr = ingredients.map((ingredient) => {
+  //   console.log(ingredient.ingredient);
+  // });
+
+  console.log(ingredients);
+};
+// const getUstensilsList = (recipes) => {
+
+// };
+// const getDevicesList = (recipes) => {
+
+// };
 
 const service =  {
   getRecipes,
   displayRecipes,
   getRecipesNumbers,
+  getIngredientsList,
 };
 
 export default service;

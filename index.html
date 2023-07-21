@@ -19,6 +19,16 @@
       href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/fontawesome.min.css"
+      integrity="sha384-zIaWifL2YFF1qaDiAo0JFgsmasocJ/rqu7LKYH8CoBEXqGbb9eO+Xi3s6fQhgFWM"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/4e18fab892.js"
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
@@ -41,21 +51,87 @@
           type="search"
           placeholder="Rechercher une recette, un ingrédient, ..."
         />
-        <img src="./images/loupe.svg" alt="Recherche" class="loupe" />
+        <img src="./images/loupe.svg" alt="Recherche" class="searchBtn" />
       </div>
+      <div class="noResults"></div>
     </section>
     <main class="main-container">
       <div class="flex-space-between">
         <div class="recipes-filters">
-          <select name="ingredients" id="">
-            <option value="Ingrédients">Ingrédients</option>
-          </select>
-          <select name="devices" id="">
-            <option value="Appareils">Appareils</option>
-          </select>
-          <select name="utensils" id="">
-            <option value="Ustensiles">Ustensiles</option>
-          </select>
+          <div id="divTags"></div>
+          <div id="divFilters">
+            <div class="filterBlock" id="filterIngredients">
+              <div class="filterButton">
+                <span>Ingrédients</span>
+                <input
+                  type="text"
+                  class="inputFilter"
+                  placeholder="Rechercher un ingrédient"
+                  name="inputIngredient"
+                  id="inputIngredient"
+                />
+                <div class="divArrow">
+                  <i
+                    class="fa-solid fa-angle-down filterArrowDown"
+                    id="displayIngredientsList"
+                  ></i>
+                  <i
+                    class="fa-solid fa-angle-up filterArrowUp"
+                    id="hideIngredientsList"
+                  ></i>
+                </div>
+              </div>
+              <div id="ingredientsList" class="filterList"></div>
+            </div>
+
+            <div class="filterBlock" id="filterDevices">
+              <div class="filterButton">
+                <span>Appareils</span>
+                <input
+                  type="text"
+                  class="inputFilter"
+                  placeholder="Rechercher un appareil"
+                  name="inputAppareil"
+                  id="inputAppareil"
+                />
+                <div class="divArrow">
+                  <i
+                    class="fa-solid fa-angle-down filterArrowDown"
+                    id="displayDevicesList"
+                  ></i>
+                  <i
+                    class="fa-solid fa-angle-up filterArrowUp"
+                    id="hideDevicesList"
+                  ></i>
+                </div>
+              </div>
+              <div id="devicesList" class="filterList"></div>
+            </div>
+
+            <div class="filterBlock" id="filterUstensiles">
+              <div class="filterButton">
+                <span>Ustensiles</span>
+                <input
+                  type="text"
+                  class="inputFilter"
+                  placeholder="Rechercher un ustensile"
+                  name="inputUstensile"
+                  id="inputUstensile"
+                />
+                <div class="divArrow">
+                  <i
+                    class="fa-solid fa-angle-down filterArrowDown"
+                    id="displayUstensilesList"
+                  ></i>
+                  <i
+                    class="fa-solid fa-angle-up filterArrowUp"
+                    id="hideUstensilesList"
+                  ></i>
+                </div>
+              </div>
+              <div id="ustensilesList" class="filterList"></div>
+            </div>
+          </div>
         </div>
         <h2 class="recipes-numbers">numbers</h2>
       </div>

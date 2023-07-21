@@ -25,28 +25,31 @@ const initializeRecipes = async (recipes) => {
 
 const initializeIngredients = async (ingredients) => {
   ingredients.map((ingredient) => {
+    const div = document.createElement('div');
     const p = document.createElement("p");
     p.innerText = ingredient;
-    document.querySelector("#ingredientsList").appendChild(p);
-
+    document.querySelector("#ingredientsList").appendChild(div);
+    div.appendChild(p);
   });
 };
 
 const initializeAppliances = async (appliances) => {
   appliances.map((appliance) => {
+    const div = document.createElement('div');
     const p = document.createElement("p");
     p.innerText = appliance;
-    document.querySelector("#devicesList").appendChild(p);
-
+    document.querySelector("#devicesList").appendChild(div);
+    div.appendChild(p);
   });
 };
 
 const initializeUstensils = async (ustensils) => {
   ustensils.map((ustensile) => {
+    const div = document.createElement('div');
     const p = document.createElement("p");
     p.innerText = ustensile;
-    document.querySelector("#ustensilesList").appendChild(p);
-
+    document.querySelector("#ustensilesList").appendChild(div);
+    div.appendChild(p);
   });
 };
 

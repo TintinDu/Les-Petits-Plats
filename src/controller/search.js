@@ -4,44 +4,54 @@ const searchBar = document.querySelector('#search');
 // pas d'export, le contrôleur import et appelle les fonctions
 
 const recipes =  await service.getRecipes();
+let word;
 
-const initializeRecipes = async () => {
+const initializeRecipes = async (recipes) => {
   service.displayRecipes(recipes);
   service.getRecipesNumbers(recipes);
 
   return recipes;
 };
 
+initializeRecipes(recipes);
 
-const filterRecipes = () => {
-  // document.querySelector('.recipes-section').innerHTML = "";
-  const word = searchBar.value;
-  search(word);
-
-  recipes.map((recipe) => {
-
-    if (recipe.name.toLowerCase().includes(word)) {
-      return recipe;
-    }
-  });
+const filterWithName = (word, recipe) => {
+  return recipe.name.toLowerCase().includes(word);
 };
 
+const filterWithDescription = (word, recipe) => {
+  return recipe.description.toLowerCase().includes(word);
+};
 
-const search = (word) => {
+const filterWithIngredients = (word, recipe) => {
   let results = [];
-
-  if (searchBar.value.length >= 3){
-    const recipe = filterRecipes(word, recipes);
-    results.push(recipe);
-  }
-
-  console.log(results);
+  recipe.ingredients.map((array) => {
+    results = array.ingredient.toLocaleLowerCase().includes(word);
+  });
   return results;
 };
 
-searchBar.addEventListener('keyup', filterRecipes);
+
+const search = () => {
+  let results = [];
+
+  if (searchBar.value.length >= 3){
+    document.querySelector('.recipes-section').innerHTML = "";
+    word = searchBar.value;
+    recipes.map((recipe) => {
+
+      if (filterWithName(word, recipe) || filterWithDescription(word, recipe) || filterWithIngredients(word, recipe)) {
+        results.push(recipe);
+      }
+    });
+    initializeRecipes(results);
+    console.log(results);
+  }
+
+};
+
+searchBar.addEventListener('keyup', search);
 
 
 
 
-initializeRecipes();

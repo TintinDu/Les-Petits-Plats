@@ -176,7 +176,7 @@ div.ustensileTag {
 .inputFilter,
 .filterArrowUp,
 .active .filterArrowDown,
-.active span {
+.span {
   display: none;
 }
 
@@ -199,14 +199,18 @@ div.ustensileTag {
   flex-wrap: wrap;
   column-gap: 20px;
   row-gap: 15px;
-  padding: 10px 10px;
+  padding: 5px 0;
   z-index: 1;
 }
 
-.filterList p {
+.filterList div {
   width: 100%;
 }
-.filterList p:hover {
+
+.filterList p {
+  padding-left: 1em;
+}
+.filterList div:hover {
   background-color: #ffd15b;
 }
 
@@ -229,13 +233,11 @@ div.ustensileTag {
 }
 
 .inputFilter {
-  outline: none;
-  width: calc(100% - 45px);
-  margin: 0px;
+  margin-top: 5px;
 }
 
 .inputFilter::placeholder {
-  color: white;
+  color: grey;
   opacity: 0.8;
 }
 

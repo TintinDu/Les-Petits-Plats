@@ -42,7 +42,6 @@ const handleSearch = () => {
 };
 
 const filterRecipesBySelectedIngredients = (selectedIngredient) => {
-  console.log(selectedIngredient.toString());
   const filteredRecipes = recipes.filter(recipe =>
     recipe.ingredients.some(ingredient =>
       ingredient.ingredient.toLowerCase().includes(selectedIngredient.toString().toLowerCase()),
@@ -52,7 +51,6 @@ const filterRecipesBySelectedIngredients = (selectedIngredient) => {
 };
 
 const filterRecipesBySelectedAppliances = (selectedAppliance) => {
-  console.log(selectedAppliance.toString());
   const filteredRecipes = recipes.filter(recipe =>
     recipe.appliance.toLowerCase().includes(selectedAppliance.toString().toLowerCase()),
   );
@@ -60,7 +58,6 @@ const filterRecipesBySelectedAppliances = (selectedAppliance) => {
 };
 
 const filterRecipesBySelectedUstensils = (selectedUstensil) => {
-  console.log(selectedUstensil.toString());
   const filteredRecipes = recipes.filter(recipe =>
     recipe.ustensils.some(ustensil =>
       ustensil.toLowerCase().includes(selectedUstensil.toString().toLowerCase()),
@@ -74,12 +71,24 @@ const filterRecipe = (searchWords, recipe) => {
   const lowerCaseIngredients = recipe.ingredients.map(ingredient => ingredient.ingredient.toLowerCase());
   const lowerCaseAppliance = recipe.appliance.toLowerCase();
   const lowerCaseUstensils = recipe.ustensils.map(ustensil => ustensil.toLowerCase());
+  const lowerCaseTitle = recipe.name.toLowerCase();
+  const lowerCaseDescription = recipe.description.toLowerCase();
 
+  const hasMatchingTitle = searchWithTitle(searchWords, lowerCaseTitle);
+  const hasMatchingDescription = searchWithDescription(searchWords, lowerCaseDescription);
   const hasMatchingIngredients = searchWithIngredients(searchWords, lowerCaseIngredients);
   const hasMatchingAppliance = searchWithAppliances(searchWords, lowerCaseAppliance);
   const hasMatchingUstensils = searchWithUstensils(searchWords, lowerCaseUstensils);
 
-  return hasMatchingIngredients || hasMatchingAppliance || hasMatchingUstensils;
+  return hasMatchingTitle || hasMatchingDescription || hasMatchingIngredients || hasMatchingAppliance || hasMatchingUstensils ;
+};
+
+const searchWithTitle = (searchWords, title) => {
+  return searchWords.every(word => title.includes(word));
+};
+
+const searchWithDescription = (searchWords, description) => {
+  return searchWords.every(word => description.includes(word));
 };
 
 const searchWithIngredients = (searchWords, ingredients) => {
@@ -111,6 +120,15 @@ const initialize = async () => {
   ingredientsList.addEventListener("click", handleIngredientFilter);
   appliancesList.addEventListener("click", handleApplianceFilter);
   ustensilsList.addEventListener("click", handleUstensilFilter);
+
+  // Initialize search input event listeners
+  const inputIngredient = document.querySelector("#inputIngredient");
+  const inputAppareil = document.querySelector("#inputAppareil");
+  const inputUstensile = document.querySelector("#inputUstensile");
+
+  inputIngredient.addEventListener("input", handleIngredientSearch);
+  inputAppareil.addEventListener("input", handleApplianceSearch);
+  inputUstensile.addEventListener("input", handleUstensilSearch);
 
   initializeFilters();
 };
@@ -197,7 +215,8 @@ const handleUstensilFilter = () => {
 };
 
 const searchIngredient = (ingredient, ingredients) => {
-  const searchValue = ingredient.toLowerCase().trim();
+  console.log(ingredient);
+  const searchValue = ingredient.trim();
   const filteredIngredients = ingredients.filter((item) =>
     item.toLowerCase().includes(searchValue),
   );
@@ -205,7 +224,8 @@ const searchIngredient = (ingredient, ingredients) => {
 };
 
 const searchAppliance = (appliance, appliances) => {
-  const searchValue = appliance.toLowerCase().trim();
+  console.log(appliance);
+  const searchValue = appliance.trim();
   const filteredAppliances = appliances.filter((item) =>
     item.toLowerCase().includes(searchValue),
   );
@@ -213,7 +233,7 @@ const searchAppliance = (appliance, appliances) => {
 };
 
 const searchUstensil = (ustensil, ustensils) => {
-  const searchValue = ustensil.toLowerCase().trim();
+  const searchValue = ustensil.trim();
   const filteredUstensils = ustensils.filter((item) =>
     item.toLowerCase().includes(searchValue),
   );
@@ -228,59 +248,123 @@ const initializeFilters = () => {
 
 const initializeIngredients = () => {
   const ingredientsList = document.querySelector("#ingredientsList");
+  const inputIngredient = document.querySelector("#inputIngredient"); // New: Get the input element
   ingredientsList.innerHTML = '';
-  const ingredients = service.getIngredientsList(recipes);
-  ingredients.forEach((ingredient) => {
-    const div = document.createElement('div');
-    const p = document.createElement("p");
-    p.innerText = ingredient;
-    div.appendChild(p);
-    ingredientsList.appendChild(div);
 
-    div.addEventListener("click", (event) => {
-      event.stopPropagation();
-      selectedIngredient = ingredient.toLowerCase();
-      handleIngredientFilter();
-    });
+  inputIngredient.addEventListener("input", () => {
+    const searchValue = inputIngredient.value.toLowerCase().trim(); // New: Get the search input value
+    const filteredIngredients = searchIngredient(searchValue, service.getIngredientsList(recipes));
+    displayFilteredList(filteredIngredients, ingredientsList); // New: Display the filtered list
   });
+
+  ingredientsList.addEventListener("click", (event) => {
+    const clickedListItem = event.target.closest("div");
+    if (clickedListItem) {
+      event.stopPropagation();
+      const inputValue = clickedListItem.textContent.trim();
+      selectedIngredient = inputValue; // Update the selectedAppliance variable
+      handleIngredientFilter(); // Trigger the filter when a filter item is clicked
+    }
+  });
+
+  // Initially display the full ingredients list
+  displayFilteredList(service.getIngredientsList(recipes), ingredientsList);
 };
 
 const initializeAppliances = () => {
-  const devicesList = document.querySelector("#devicesList");
-  devicesList.innerHTML = '';
-  const appliances = service.getAppliancesList(recipes);
-  appliances.forEach((appliance) => {
-    const div = document.createElement('div');
-    const p = document.createElement("p");
-    p.innerText = appliance;
-    div.appendChild(p);
-    devicesList.appendChild(div);
+  const appliancesList = document.querySelector("#devicesList");
+  const inputAppareil = document.querySelector("#inputAppareil"); // New: Get the input element
+  appliancesList.innerHTML = '';
 
-    div.addEventListener("click", (event) => {
-      event.stopPropagation();
-      selectedAppliance = appliance.toLowerCase();
-      handleApplianceFilter();
-    });
+  inputAppareil.addEventListener("input", () => {
+    const searchValue = inputAppareil.value.toLowerCase().trim(); // New: Get the search input value
+    const filteredAppliances = searchAppliance(searchValue, service.getAppliancesList(recipes));
+    displayFilteredList(filteredAppliances, appliancesList); // New: Display the filtered list
   });
+
+  // Add click event listener to update the selectedAppliance variable
+  appliancesList.addEventListener("click", (event) => {
+    const clickedListItem = event.target.closest("div");
+    if (clickedListItem) {
+      event.stopPropagation();
+      const inputValue = clickedListItem.textContent.trim();
+      selectedAppliance = inputValue; // Update the selectedAppliance variable
+      handleApplianceFilter(); // Trigger the filter when a filter item is clicked
+    }
+  });
+
+  // Initially display the full appliances list
+  displayFilteredList(service.getAppliancesList(recipes), appliancesList);
 };
 
 const initializeUstensils = () => {
   const ustensilesList = document.querySelector("#ustensilesList");
+  const inputUstensile = document.querySelector("#inputUstensile"); // New: Get the input element
   ustensilesList.innerHTML = '';
-  const ustensils = service.getUstensilsList(recipes);
-  ustensils.forEach((ustensil) => {
+
+  inputUstensile.addEventListener("input", () => {
+    const searchValue = inputUstensile.value.toLowerCase().trim(); // New: Get the search input value
+    const filteredUstensils = searchUstensil(searchValue, service.getUstensilsList(recipes));
+    displayFilteredList(filteredUstensils, ustensilesList); // New: Display the filtered list
+  });
+
+  ustensilesList.addEventListener("click", (event) => {
+    const clickedListItem = event.target.closest("div");
+    if (clickedListItem) {
+      event.stopPropagation();
+      const inputValue = clickedListItem.textContent.trim();
+      selectedUstensil = inputValue; // Update the selectedAppliance variable
+      handleUstensilFilter(); // Trigger the filter when a filter item is clicked
+    }
+  });
+
+  // Initially display the full ustensils list
+  displayFilteredList(service.getUstensilsList(recipes), ustensilesList);
+};
+
+const displayFilteredList = (filteredList, listContainer) => {
+  listContainer.innerHTML = '';
+  filteredList.forEach((item) => {
     const div = document.createElement('div');
     const p = document.createElement("p");
-    p.innerText = ustensil;
+    p.innerText = item;
     div.appendChild(p);
-    ustensilesList.appendChild(div);
+    listContainer.appendChild(div);
 
-    div.addEventListener("click", (event) => {
-      event.stopPropagation();
-      selectedUstensil = ustensil.toLowerCase();
-      handleUstensilFilter();
+    // Add click event listener to update the search input value when an item is clicked
+    listContainer.addEventListener("click", (event) => {
+      const clickedListItem = event.target.closest("div");
+      if (clickedListItem) {
+        event.stopPropagation();
+        const inputValue = item.toLowerCase();
+        const inputElement = listContainer.previousElementSibling;
+        inputElement.value = inputValue;
+        inputElement.dispatchEvent(new Event("input"));
+      }
     });
   });
 };
+
+const handleIngredientSearch = () => {
+  const searchValue = document.querySelector("#inputIngredient").value.toLowerCase().trim();
+  const filteredIngredients = searchIngredient(searchValue, service.getIngredientsList(recipes));
+  const filteredRecipes = filterRecipesBySelectedIngredients(filteredIngredients);
+  service.displayRecipes(filteredRecipes);
+};
+
+const handleApplianceSearch = () => {
+  const searchValue = document.querySelector("#inputAppareil").value.toLowerCase().trim();
+  const filteredAppliances = searchAppliance(searchValue, service.getAppliancesList(recipes));
+  const filteredRecipes = filterRecipesBySelectedAppliances(filteredAppliances);
+  service.displayRecipes(filteredRecipes);
+};
+
+const handleUstensilSearch = () => {
+  const searchValue = document.querySelector("#inputUstensile").value.toLowerCase().trim();
+  const filteredUstensils = searchUstensil(searchValue, service.getUstensilsList(recipes));
+  const filteredRecipes = filterRecipesBySelectedUstensils(filteredUstensils);
+  service.displayRecipes(filteredRecipes);
+};
+
 
 initialize();

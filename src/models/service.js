@@ -55,6 +55,8 @@ const getRecipes = async () => {
 
 const displayRecipes = (recipes) => {
   const recipesSection = document.querySelector(".recipes-section");
+  recipesSection.innerHTML = '';
+
   recipes.forEach((recipe) => {
     const recipeCardDom = getRecipeCardDom(recipe);
     recipesSection.appendChild(recipeCardDom);

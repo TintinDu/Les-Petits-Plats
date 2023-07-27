@@ -63,18 +63,40 @@ const filterWithName = (word, recipe) => {
 };
 
 const filterWithDescription = (word, recipe) => {
+  // concat
+  // spread
   return recipe.description.toLowerCase().includes(word);
 };
+
+// const filteredRecipes = [...recipes1, ...recipes2].reduce((acc, currentValue) => {
+//   if (!acc.some((element) => element.id === currentValue.id)) {
+//   acc.push(currentValue);
+
+//   }
+//   return acc;
+// }, []);
 
 const filterWithIngredients = (word, recipe) => {
   let results = [];
   recipe.ingredients.map((array) => {
-    results = array.ingredient.toLocaleLowerCase().includes(word);
+    results = array.ingredient.toLowerCase().includes(word);
   });
   return results;
 };
 
-// const filterWithTags = () => {
+// const filterWithTags = (tag) => {
+// filteredRecipes = recipes.filter((recipe) => {
+// return recipe.includes(tag)
+// })
+// };
+
+// const searchIngredient = () => {
+
+// };
+// const searchAppliance = () => {
+
+// };
+// const searchUstentil = () => {
 
 // };
 
@@ -102,6 +124,7 @@ const search = () => {
         results.push(recipe);
       }
     });
+
     initializeRecipes(results);
   }
   if(results.length === 0) {

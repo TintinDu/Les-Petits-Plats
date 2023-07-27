@@ -11,7 +11,6 @@ let selectedUstensil = null;
 
 const initializeData = async () => {
   recipes = await service.getRecipes();
-  initializeFilters();
   applySearchBarEvents();
 };
 
@@ -53,6 +52,7 @@ const filterRecipesBySelectedIngredients = (selectedIngredient) => {
 };
 
 const filterRecipesBySelectedAppliances = (selectedAppliance) => {
+  console.log(selectedAppliance.toString());
   const filteredRecipes = recipes.filter(recipe =>
     recipe.appliance.toLowerCase().includes(selectedAppliance.toString().toLowerCase()),
   );
@@ -111,9 +111,9 @@ const initialize = async () => {
   ingredientsList.addEventListener("click", handleIngredientFilter);
   appliancesList.addEventListener("click", handleApplianceFilter);
   ustensilsList.addEventListener("click", handleUstensilFilter);
-};
 
-initialize();
+  initializeFilters();
+};
 
 document.querySelector("#displayIngredientsList").addEventListener("click", () =>{
   toggleFiltersList("ingredients", "display");
@@ -139,7 +139,6 @@ function toggleFiltersList(block, action) {
   const filterDevices = document.getElementById("filterDevices");
   const filterUstensiles = document.getElementById("filterUstensiles");
 
-  console.log(block, action);
   switch (block) {
     case "ingredients":
       if (action === "display") {
@@ -238,7 +237,8 @@ const initializeIngredients = () => {
     div.appendChild(p);
     ingredientsList.appendChild(div);
 
-    div.addEventListener("click", () => {
+    div.addEventListener("click", (event) => {
+      event.stopPropagation();
       selectedIngredient = ingredient.toLowerCase();
       handleIngredientFilter();
     });
@@ -256,14 +256,13 @@ const initializeAppliances = () => {
     div.appendChild(p);
     devicesList.appendChild(div);
 
-    div.addEventListener("click", () => {
+    div.addEventListener("click", (event) => {
+      event.stopPropagation();
       selectedAppliance = appliance.toLowerCase();
       handleApplianceFilter();
     });
   });
 };
-
-
 
 const initializeUstensils = () => {
   const ustensilesList = document.querySelector("#ustensilesList");
@@ -276,10 +275,12 @@ const initializeUstensils = () => {
     div.appendChild(p);
     ustensilesList.appendChild(div);
 
-    div.addEventListener("click", () => {
-      selectedUstensil = ustensil;
+    div.addEventListener("click", (event) => {
+      event.stopPropagation();
+      selectedUstensil = ustensil.toLowerCase();
       handleUstensilFilter();
     });
   });
 };
 
+initialize();

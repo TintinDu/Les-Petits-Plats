@@ -14,17 +14,17 @@ const getListFromProperty = (recipes, property) => {
   recipes.forEach((recipe) => {
     if (property === "ingredients") {
       recipe[property].forEach((ingredient) => {
-        listSet.add(ingredient.ingredient);
+        listSet.add(ingredient.ingredient.toLowerCase());
       });
     } else {
       const propertyValue = getPropertyDeep(recipe, property);
       if (propertyValue) {
         if (Array.isArray(propertyValue)) {
           propertyValue.forEach((item) => {
-            listSet.add(item);
+            listSet.add(item.toLowerCase()); // Convert to lowercase
           });
         } else {
-          listSet.add(propertyValue);
+          listSet.add(propertyValue.toLowerCase()); // Convert to lowercase
         }
       }
     }

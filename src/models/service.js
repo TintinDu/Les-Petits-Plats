@@ -21,10 +21,10 @@ const getListFromProperty = (recipes, property) => {
       if (propertyValue) {
         if (Array.isArray(propertyValue)) {
           propertyValue.forEach((item) => {
-            listSet.add(item.toLowerCase()); // Convert to lowercase
+            listSet.add(item.toLowerCase());
           });
         } else {
-          listSet.add(propertyValue.toLowerCase()); // Convert to lowercase
+          listSet.add(propertyValue.toLowerCase());
         }
       }
     }

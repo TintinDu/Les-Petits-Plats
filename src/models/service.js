@@ -9,28 +9,56 @@
 
 import getRecipeCardDom from "../views/factories/recipeCardFactory.js";
 
-const getRecipes = async () =>  {
+const getListFromProperty = (recipes, property) => {
+  const listSet = new Set();
+  recipes.forEach((recipe) => {
+    if (property === "ingredients") {
+      recipe[property].forEach((ingredient) => {
+        listSet.add(ingredient.ingredient);
+      });
+    } else {
+      const propertyValue = getPropertyDeep(recipe, property);
+      if (propertyValue) {
+        if (Array.isArray(propertyValue)) {
+          propertyValue.forEach((item) => {
+            listSet.add(item);
+          });
+        } else {
+          listSet.add(propertyValue);
+        }
+      }
+    }
+  });
+  return Array.from(listSet);
+};
 
+const getPropertyDeep = (obj, path) => {
+  const parts = path.split(".");
+  return parts.reduce((acc, part) => acc && acc[part], obj);
+};
+
+const getIngredientsList = (recipes) => getListFromProperty(recipes, "ingredients");
+const getUstensilsList = (recipes) => getListFromProperty(recipes, "ustensils");
+const getAppliancesList = (recipes) => getListFromProperty(recipes, "appliance");
+
+
+const getRecipes = async () => {
   try {
     const response = await fetch("./data/recipes.json");
     const data = await response.json();
-
     return data;
-
   } catch (error) {
     console.error(error);
+    return [];
   }
-
 };
 
-const displayRecipes = (recipes) =>  {
+const displayRecipes = (recipes) => {
   const recipesSection = document.querySelector(".recipes-section");
-
-  recipes.map((recipe) => {
+  recipes.forEach((recipe) => {
     const recipeCardDom = getRecipeCardDom(recipe);
     recipesSection.appendChild(recipeCardDom);
   });
-
 };
 
 const getRecipesNumbers = (recipes) => {
@@ -38,55 +66,7 @@ const getRecipesNumbers = (recipes) => {
   numbersHeader.textContent = `${recipes.length} RECETTES`;
 };
 
-const getIngredientsList = (recipes) => {
-  let ingredients = [];
-
-  const ingredientLists = recipes.map((recipe) => {
-    return recipe.ingredients;
-  });
-
-  ingredientLists.map((ingredientList) => {
-    ingredientList.map((ingredient) => {
-      if (!ingredients.includes(ingredient.ingredient)) {
-        ingredients.push(ingredient.ingredient);
-      }
-    });
-  });
-
-  return ingredients;
-};
-
-const getUstensilsList = (recipes) => {
-  let ustensiles = [];
-
-  const ustensileLists = recipes.map((recipe) => {
-    return recipe.ustensils;
-  });
-
-  ustensileLists.map((ustensileList) => {
-    ustensileList.map((ustensile) => {
-      if (!ustensiles.includes(ustensile)) {
-        ustensiles.push(ustensile);
-      }
-    });
-  });
-
-  return ustensiles;
-};
-
-const getAppliancesList = (recipes) => {
-  let appliances = [];
-
-  recipes.map((recipe) => {
-    if (!appliances.includes(recipe.appliance)) {
-      appliances.push(recipe.appliance);
-    }
-  });
-
-  return appliances;
-};
-
-const service =  {
+const service = {
   getRecipes,
   displayRecipes,
   getRecipesNumbers,
@@ -96,3 +76,5 @@ const service =  {
 };
 
 export default service;
+
+

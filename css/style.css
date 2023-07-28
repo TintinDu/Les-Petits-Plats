@@ -95,44 +95,6 @@ h4 {
   margin-bottom: 2em;
 }
 
-#divTags {
-  margin: 0px;
-  padding: 0px;
-  column-gap: 10px;
-  row-gap: 20px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-div.tag {
-  color: white;
-  border-radius: 5px;
-  width: fit-content;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  column-gap: 10px;
-  padding: 0px 10px;
-}
-
-div.tag i::before {
-  cursor: pointer;
-}
-
-div.ingredientTag {
-  background-color: grey;
-}
-
-div.appareilTag {
-  background-color: grey;
-}
-
-div.ustensileTag {
-  background-color: grey;
-}
-
 #divFilters {
   column-gap: 50px;
   display: flex;
@@ -339,4 +301,32 @@ div.ustensileTag {
 
 .quantity {
   margin-top: 1px;
+}
+
+#divTags > button {
+  background-color: #ffd15b;
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: 5px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+#divTags > button:hover {
+  background-color: #f9c048;
+}
+
+#divTags > div.ingredientTag {
+  background-color: #5dbb7b;
+}
+
+#divTags > div.appareilTag {
+  background-color: #6a87a2;
+}
+
+#divTags > div.ustensileTag {
+  background-color: #e74c3c;
 }

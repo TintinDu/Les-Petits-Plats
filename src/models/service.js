@@ -61,6 +61,7 @@ const displayRecipes = (recipes) => {
     const recipeCardDom = getRecipeCardDom(recipe);
     recipesSection.appendChild(recipeCardDom);
   });
+  getRecipesNumbers(recipes);
 };
 
 const getRecipesNumbers = (recipes) => {
@@ -71,7 +72,6 @@ const getRecipesNumbers = (recipes) => {
 const service = {
   getRecipes,
   displayRecipes,
-  getRecipesNumbers,
   getIngredientsList,
   getUstensilsList,
   getAppliancesList,

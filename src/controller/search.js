@@ -80,7 +80,13 @@ const filterRecipe = (searchWords, recipe) => {
   const hasMatchingAppliance = searchWithAppliances(searchWords, lowerCaseAppliance);
   const hasMatchingUstensils = searchWithUstensils(searchWords, lowerCaseUstensils);
 
-  return hasMatchingTitle || hasMatchingDescription || hasMatchingIngredients || hasMatchingAppliance || hasMatchingUstensils ;
+  const hasMatchingCombinedIngredients = searchWithCombinedIngredients(searchWords, lowerCaseIngredients);
+
+  return hasMatchingTitle || hasMatchingDescription || hasMatchingIngredients || hasMatchingAppliance || hasMatchingUstensils || hasMatchingCombinedIngredients;
+};
+
+const searchWithCombinedIngredients = (searchWords, ingredients) => {
+  return searchWords.every(word => ingredients.some(ingredient => ingredient.includes(word)));
 };
 
 const searchWithTitle = (searchWords, title) => {
@@ -210,10 +216,25 @@ const filterWithTags = () => {
 };
 
 const updateTagsList = (searchWords) => {
-  tags = searchWords;
+  tags = getCombinedIngredients(searchWords);
   displayTags();
   const filteredRecipes = filterWithTags();
   service.displayRecipes(filteredRecipes);
+};
+
+const getCombinedIngredients = (searchWords) => {
+  const combinedIngredients = [];
+  const lowerCaseIngredients = service.getIngredientsList(recipes).map(ingredient => ingredient.toLowerCase());
+
+  searchWords.forEach(word => {
+    lowerCaseIngredients.forEach(ingredient => {
+      if (ingredient.includes(word) && !combinedIngredients.includes(ingredient)) {
+        combinedIngredients.push(ingredient);
+      }
+    });
+  });
+
+  return combinedIngredients;
 };
 
 const displayTags = () => {

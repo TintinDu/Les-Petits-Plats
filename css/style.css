@@ -131,6 +131,8 @@ h4 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  position: absolute;
+  z-index: 1;
 }
 
 .filterBlock {
@@ -148,6 +150,13 @@ h4 {
 
 .filterBlock.active > .filterButton {
   margin: 15px 0px;
+}
+.divInputFilter {
+  display: none;
+  position: relative;
+}
+.filterBlock.active .divInputFilter {
+  display: block;
 }
 
 #filterIngredients.active,
@@ -327,6 +336,7 @@ h4 {
   padding: 3px 0px 0px 10px;
   bottom: 240px;
   left: 300px;
+  z-index: 0;
 }
 
 .ingredient {
@@ -365,4 +375,18 @@ h4 {
 
 #divTags > button:hover {
   background-color: #f9c048;
+}
+
+.cancelFilterBtn {
+  position: absolute;
+  top: 14px;
+  left: 149px;
+  cursor: pointer;
+}
+
+.searchFilterBtn {
+  position: absolute;
+  top: 9px;
+  left: 164px;
+  cursor: pointer;
 }

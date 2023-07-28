@@ -354,6 +354,7 @@ h4 {
 
 #divTags {
   display: flex;
+  margin-top: 4em;
 }
 
 #divTags > button {

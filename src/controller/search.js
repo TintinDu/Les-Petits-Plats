@@ -5,6 +5,7 @@ const noResultsDiv = document.querySelector(".noResults");
 const searchBtn = document.querySelector('.searchBtn');
 
 let recipes = [];
+let tags = null;
 let selectedAppliance = null;
 let selectedIngredient = null;
 let selectedUstensil = null;
@@ -36,6 +37,7 @@ const handleSearch = () => {
     noResults(searchValue);
   }
 
+  updateTagsList(searchWords);
   service.displayRecipes(filteredRecipes);
 };
 
@@ -109,7 +111,6 @@ const initialize = async () => {
   await initializeData();
   service.displayRecipes(recipes);
 
-  // Add event listeners to filter lists
   const ingredientsList = document.querySelector("#ingredientsList");
   const appliancesList = document.querySelector("#devicesList");
   const ustensilsList = document.querySelector("#ustensilesList");
@@ -118,7 +119,6 @@ const initialize = async () => {
   appliancesList.addEventListener("click", handleApplianceFilter);
   ustensilsList.addEventListener("click", handleUstensilFilter);
 
-  // Initialize search input event listeners
   const inputIngredient = document.querySelector("#inputIngredient");
   const inputAppareil = document.querySelector("#inputAppareil");
   const inputUstensile = document.querySelector("#inputUstensile");
@@ -185,11 +185,55 @@ function toggleFiltersList(block, action) {
   }
 }
 
-// const filterWithTags = (tag) => {
-// filteredRecipes = recipes.filter((recipe) => {
-// return recipe.includes(tag)
-// })
-// };
+const filterWithTags = () => {
+  let filteredRecipes = recipes;
+  if (selectedAppliance) {
+    filteredRecipes = filteredRecipes.filter(recipe =>
+      recipe.appliance.toLowerCase().includes(selectedAppliance.toLowerCase()),
+    );
+  }
+  if (selectedIngredient) {
+    filteredRecipes = filteredRecipes.filter(recipe =>
+      recipe.ingredients.some(ingredient =>
+        ingredient.ingredient.toLowerCase().includes(selectedIngredient.toLowerCase()),
+      ),
+    );
+  }
+  if (selectedUstensil) {
+    filteredRecipes = filteredRecipes.filter(recipe =>
+      recipe.ustensils.some(ustensil =>
+        ustensil.toLowerCase().includes(selectedUstensil.toLowerCase()),
+      ),
+    );
+  }
+  return filteredRecipes;
+};
+
+const updateTagsList = (searchWords) => {
+  tags = searchWords;
+  displayTags();
+  const filteredRecipes = filterWithTags();
+  service.displayRecipes(filteredRecipes);
+};
+
+const displayTags = () => {
+  const tagDiv = document.querySelector("#divTags");
+  tagDiv.innerHTML = '';
+  tags.forEach(tag => {
+    const tagButton = document.createElement('button');
+    tagButton.className = 'tag';
+    tagButton.textContent = tag;
+    tagDiv.appendChild(tagButton);
+    tagButton.addEventListener('click', removeTag);
+  });
+};
+
+const removeTag = (event) => {
+  const clickedTag = event.target.textContent;
+  tags = tags.filter(tag => tag !== clickedTag);
+  displayTags();
+  handleSearch();
+};
 
 
 const handleIngredientFilter = () => {
@@ -212,7 +256,6 @@ const handleUstensilFilter = () => {
 };
 
 const searchIngredient = (ingredient, ingredients) => {
-  console.log(ingredient);
   const searchValue = ingredient.trim();
   const filteredIngredients = ingredients.filter((item) =>
     item.toLowerCase().includes(searchValue),
@@ -221,7 +264,6 @@ const searchIngredient = (ingredient, ingredients) => {
 };
 
 const searchAppliance = (appliance, appliances) => {
-  console.log(appliance);
   const searchValue = appliance.trim();
   const filteredAppliances = appliances.filter((item) =>
     item.toLowerCase().includes(searchValue),
@@ -245,13 +287,13 @@ const initializeFilters = () => {
 
 const initializeIngredients = () => {
   const ingredientsList = document.querySelector("#ingredientsList");
-  const inputIngredient = document.querySelector("#inputIngredient"); // New: Get the input element
+  const inputIngredient = document.querySelector("#inputIngredient");
   ingredientsList.innerHTML = '';
 
   inputIngredient.addEventListener("input", () => {
-    const searchValue = inputIngredient.value.toLowerCase().trim(); // New: Get the search input value
+    const searchValue = inputIngredient.value.toLowerCase().trim();
     const filteredIngredients = searchIngredient(searchValue, service.getIngredientsList(recipes));
-    displayFilteredList(filteredIngredients, ingredientsList); // New: Display the filtered list
+    displayFilteredList(filteredIngredients, ingredientsList);
   });
 
   ingredientsList.addEventListener("click", (event) => {
@@ -259,50 +301,47 @@ const initializeIngredients = () => {
     if (clickedListItem) {
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
-      selectedIngredient = inputValue; // Update the selectedAppliance variable
-      handleIngredientFilter(); // Trigger the filter when a filter item is clicked
+      selectedIngredient = inputValue;
+      handleIngredientFilter();
     }
   });
 
-  // Initially display the full ingredients list
   displayFilteredList(service.getIngredientsList(recipes), ingredientsList);
 };
 
 const initializeAppliances = () => {
   const appliancesList = document.querySelector("#devicesList");
-  const inputAppareil = document.querySelector("#inputAppareil"); // New: Get the input element
+  const inputAppareil = document.querySelector("#inputAppareil");
   appliancesList.innerHTML = '';
 
   inputAppareil.addEventListener("input", () => {
-    const searchValue = inputAppareil.value.toLowerCase().trim(); // New: Get the search input value
+    const searchValue = inputAppareil.value.toLowerCase().trim();
     const filteredAppliances = searchAppliance(searchValue, service.getAppliancesList(recipes));
-    displayFilteredList(filteredAppliances, appliancesList); // New: Display the filtered list
+    displayFilteredList(filteredAppliances, appliancesList);
   });
 
-  // Add click event listener to update the selectedAppliance variable
   appliancesList.addEventListener("click", (event) => {
     const clickedListItem = event.target.closest("div");
     if (clickedListItem) {
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
-      selectedAppliance = inputValue; // Update the selectedAppliance variable
-      handleApplianceFilter(); // Trigger the filter when a filter item is clicked
+      selectedAppliance = inputValue;
+      handleApplianceFilter();
     }
   });
 
-  // Initially display the full appliances list
   displayFilteredList(service.getAppliancesList(recipes), appliancesList);
 };
 
 const initializeUstensils = () => {
   const ustensilesList = document.querySelector("#ustensilesList");
-  const inputUstensile = document.querySelector("#inputUstensile"); // New: Get the input element
+  const inputUstensile = document.querySelector("#inputUstensile");
   ustensilesList.innerHTML = '';
 
   inputUstensile.addEventListener("input", () => {
-    const searchValue = inputUstensile.value.toLowerCase().trim(); // New: Get the search input value
+    const searchValue = inputUstensile.value.toLowerCase().trim();
     const filteredUstensils = searchUstensil(searchValue, service.getUstensilsList(recipes));
-    displayFilteredList(filteredUstensils, ustensilesList); // New: Display the filtered list
+    displayFilteredList(filteredUstensils, ustensilesList);
   });
 
   ustensilesList.addEventListener("click", (event) => {
@@ -310,12 +349,11 @@ const initializeUstensils = () => {
     if (clickedListItem) {
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
-      selectedUstensil = inputValue; // Update the selectedAppliance variable
-      handleUstensilFilter(); // Trigger the filter when a filter item is clicked
+      selectedUstensil = inputValue;
+      handleUstensilFilter();
     }
   });
 
-  // Initially display the full ustensils list
   displayFilteredList(service.getUstensilsList(recipes), ustensilesList);
 };
 
@@ -328,7 +366,6 @@ const displayFilteredList = (filteredList, listContainer) => {
     div.appendChild(p);
     listContainer.appendChild(div);
 
-    // Add click event listener to update the search input value when an item is clicked
     listContainer.addEventListener("click", (event) => {
       const clickedListItem = event.target.closest("div");
       if (clickedListItem) {

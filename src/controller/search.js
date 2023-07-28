@@ -26,7 +26,6 @@ const handleSearch = () => {
   if (searchValue.length < 3) {
     noResultsDiv.textContent = "";
     service.displayRecipes(recipes);
-    service.getRecipesNumbers(recipes);
     return;
   }
 
@@ -38,7 +37,6 @@ const handleSearch = () => {
   }
 
   service.displayRecipes(filteredRecipes);
-  service.getRecipesNumbers(filteredRecipes);
 };
 
 const filterRecipesBySelectedIngredients = (selectedIngredient) => {
@@ -110,7 +108,6 @@ const noResults = (word) => {
 const initialize = async () => {
   await initializeData();
   service.displayRecipes(recipes);
-  service.getRecipesNumbers(recipes);
 
   // Add event listeners to filter lists
   const ingredientsList = document.querySelector("#ingredientsList");

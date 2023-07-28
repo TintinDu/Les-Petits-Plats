@@ -303,30 +303,27 @@ h4 {
   margin-top: 1px;
 }
 
+#divTags {
+  display: flex;
+}
+
 #divTags > button {
   background-color: #ffd15b;
   color: #000;
   font-size: 14px;
   font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 20px;
-  margin: 5px;
+  border: none;
+  padding: 20px 15px;
+  border-radius: 10px;
+  margin: 10px 50px 0px 0px;
   display: inline-block;
   cursor: pointer;
+  height: 60px;
+  width: 200px;
+  border-radius: 15px;
+  display: flex;
 }
 
 #divTags > button:hover {
   background-color: #f9c048;
-}
-
-#divTags > div.ingredientTag {
-  background-color: #5dbb7b;
-}
-
-#divTags > div.appareilTag {
-  background-color: #6a87a2;
-}
-
-#divTags > div.ustensileTag {
-  background-color: #e74c3c;
 }

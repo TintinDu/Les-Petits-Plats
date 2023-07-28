@@ -1,8 +1,8 @@
 import service from "../models/service.js";
 
-const searchBar = document.querySelector('#search');
+const searchBar = document.querySelector("#search");
 const noResultsDiv = document.querySelector(".noResults");
-const searchBtn = document.querySelector('.searchBtn');
+const searchBtn = document.querySelector(".searchBtn");
 
 let recipes = [];
 let tags = null;
@@ -10,14 +10,33 @@ let selectedAppliance = null;
 let selectedIngredient = null;
 let selectedUstensil = null;
 
+const initialize = async () => {
+  await initializeData();
+  service.displayRecipes(recipes);
+
+  const ingredientsList = document.querySelector("#ingredientsList");
+  const appliancesList = document.querySelector("#devicesList");
+  const ustensilsList = document.querySelector("#ustensilesList");
+
+  ingredientsList.addEventListener("click", handleIngredientFilter);
+  appliancesList.addEventListener("click", handleApplianceFilter);
+  ustensilsList.addEventListener("click", handleUstensilFilter);
+
+  const inputIngredient = document.querySelector("#inputIngredient");
+  const inputAppareil = document.querySelector("#inputAppareil");
+  const inputUstensile = document.querySelector("#inputUstensile");
+
+  inputIngredient.addEventListener("input", handleIngredientSearch);
+  inputAppareil.addEventListener("input", handleApplianceSearch);
+  inputUstensile.addEventListener("input", handleUstensilSearch);
+
+  initializeFilters();
+  updateFilterLists(recipes);
+};
+
 const initializeData = async () => {
   recipes = await service.getRecipes();
   applySearchBarEvents();
-};
-
-const applySearchBarEvents = () => {
-  searchBar.addEventListener('input', handleSearch);
-  searchBtn.addEventListener('click', handleSearch);
 };
 
 const handleSearch = () => {
@@ -27,11 +46,12 @@ const handleSearch = () => {
   if (searchValue.length < 3) {
     noResultsDiv.textContent = "";
     service.displayRecipes(recipes);
+    updateFilterLists(recipes);
     return;
   }
 
-  const searchWords = searchValue.split(" ").filter(word => word.length >= 2);
-  const filteredRecipes = recipes.filter(recipe => filterRecipe(searchWords, recipe));
+  const searchWords = searchValue.split(" ").filter((word) => word.length >= 2);
+  const filteredRecipes = recipes.filter((recipe) => filterRecipe(searchWords, recipe));
 
   if (filteredRecipes.length === 0) {
     noResults(searchValue);
@@ -39,6 +59,12 @@ const handleSearch = () => {
 
   updateTagsList(searchWords);
   service.displayRecipes(filteredRecipes);
+  updateFilterLists(filteredRecipes);
+};
+
+const applySearchBarEvents = () => {
+  searchBar.addEventListener("input", handleSearch);
+  searchBtn.addEventListener("click", handleSearch);
 };
 
 const filterRecipesBySelectedIngredients = (selectedIngredient) => {
@@ -112,49 +138,6 @@ const searchWithUstensils = (searchWords, ustensils) => {
 const noResults = (word) => {
   noResultsDiv.textContent = `Aucune recette ne contient ${word}. Vous pouvez chercher «tarte aux pommes» , «poisson»`;
 };
-
-const initialize = async () => {
-  await initializeData();
-  service.displayRecipes(recipes);
-
-  const ingredientsList = document.querySelector("#ingredientsList");
-  const appliancesList = document.querySelector("#devicesList");
-  const ustensilsList = document.querySelector("#ustensilesList");
-
-  ingredientsList.addEventListener("click", handleIngredientFilter);
-  appliancesList.addEventListener("click", handleApplianceFilter);
-  ustensilsList.addEventListener("click", handleUstensilFilter);
-
-  const inputIngredient = document.querySelector("#inputIngredient");
-  const inputAppareil = document.querySelector("#inputAppareil");
-  const inputUstensile = document.querySelector("#inputUstensile");
-
-  inputIngredient.addEventListener("input", handleIngredientSearch);
-  inputAppareil.addEventListener("input", handleApplianceSearch);
-  inputUstensile.addEventListener("input", handleUstensilSearch);
-
-  initializeFilters();
-  updateFilterLists(recipes);
-};
-
-document.querySelector("#displayIngredientsList").addEventListener("click", () =>{
-  toggleFiltersList("ingredients", "display");
-});
-document.querySelector("#hideIngredientsList").addEventListener("click", () =>{
-  toggleFiltersList("ingredients", "hide");
-});
-document.querySelector("#displayDevicesList").addEventListener("click", () =>{
-  toggleFiltersList("devices", "display");
-});
-document.querySelector("#hideDevicesList").addEventListener("click", () =>{
-  toggleFiltersList("devices", "hide");
-});
-document.querySelector("#displayUstensilesList").addEventListener("click", () =>{
-  toggleFiltersList("ustensiles", "display");
-});
-document.querySelector("#hideUstensilesList").addEventListener("click", () =>{
-  toggleFiltersList("ustensiles", "hide");
-});
 
 function toggleFiltersList(block, action) {
   const filterIngredients = document.getElementById("filterIngredients");
@@ -279,7 +262,7 @@ searchBar.addEventListener("input", () => {
 
   updateTagsList(searchWords);
   service.displayRecipes(filteredRecipes);
-  updateFilterLists(filteredRecipes); // Update the filter lists based on the filtered recipes
+  updateFilterLists(filteredRecipes);
 });
 
 const updateTagsList = (searchWords) => {
@@ -342,7 +325,7 @@ const handleUstensilFilter = () => {
 };
 
 const searchIngredient = (ingredient, ingredients) => {
-  const searchValue = ingredient.trim();
+  const searchValue = ingredient;
   const filteredIngredients = ingredients.filter((item) =>
     item.toLowerCase().includes(searchValue),
   );
@@ -350,7 +333,7 @@ const searchIngredient = (ingredient, ingredients) => {
 };
 
 const searchAppliance = (appliance, appliances) => {
-  const searchValue = appliance.trim();
+  const searchValue = appliance;
   const filteredAppliances = appliances.filter((item) =>
     item.toLowerCase().includes(searchValue),
   );
@@ -358,7 +341,7 @@ const searchAppliance = (appliance, appliances) => {
 };
 
 const searchUstensil = (ustensil, ustensils) => {
-  const searchValue = ustensil.trim();
+  const searchValue = ustensil;
   const filteredUstensils = ustensils.filter((item) =>
     item.toLowerCase().includes(searchValue),
   );
@@ -467,23 +450,36 @@ const displayFilteredList = (filteredList, listContainer) => {
 
 const handleIngredientSearch = () => {
   const searchValue = document.querySelector("#inputIngredient").value.toLowerCase().trim();
-  const filteredIngredients = searchIngredient(searchValue, service.getIngredientsList(recipes));
-  const filteredRecipes = filterRecipesBySelectedIngredients(filteredIngredients);
-  service.displayRecipes(filteredRecipes);
+  searchIngredient(searchValue, service.getIngredientsList(recipes));
 };
 
 const handleApplianceSearch = () => {
   const searchValue = document.querySelector("#inputAppareil").value.toLowerCase().trim();
-  const filteredAppliances = searchAppliance(searchValue, service.getAppliancesList(recipes));
-  const filteredRecipes = filterRecipesBySelectedAppliances(filteredAppliances);
-  service.displayRecipes(filteredRecipes);
+  searchAppliance(searchValue, service.getAppliancesList(recipes));
 };
 
 const handleUstensilSearch = () => {
   const searchValue = document.querySelector("#inputUstensile").value.toLowerCase().trim();
-  const filteredUstensils = searchUstensil(searchValue, service.getUstensilsList(recipes));
-  const filteredRecipes = filterRecipesBySelectedUstensils(filteredUstensils);
-  service.displayRecipes(filteredRecipes);
+  searchUstensil(searchValue, service.getUstensilsList(recipes));
 };
+
+document.querySelector("#displayIngredientsList").addEventListener("click", () =>{
+  toggleFiltersList("ingredients", "display");
+});
+document.querySelector("#hideIngredientsList").addEventListener("click", () =>{
+  toggleFiltersList("ingredients", "hide");
+});
+document.querySelector("#displayDevicesList").addEventListener("click", () =>{
+  toggleFiltersList("devices", "display");
+});
+document.querySelector("#hideDevicesList").addEventListener("click", () =>{
+  toggleFiltersList("devices", "hide");
+});
+document.querySelector("#displayUstensilesList").addEventListener("click", () =>{
+  toggleFiltersList("ustensiles", "display");
+});
+document.querySelector("#hideUstensilesList").addEventListener("click", () =>{
+  toggleFiltersList("ustensiles", "hide");
+});
 
 initialize();

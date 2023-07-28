@@ -3,6 +3,7 @@ import service from "../models/service.js";
 const searchBar = document.querySelector("#search");
 const noResultsDiv = document.querySelector(".noResults");
 const searchBtn = document.querySelector(".searchBtn");
+const cancelBtn = document.querySelector('.cancelBtn');
 
 let recipes = [];
 let tags = null;
@@ -13,6 +14,7 @@ let selectedUstensil = null;
 const initialize = async () => {
   await initializeData();
   service.displayRecipes(recipes);
+  cancelBtn.classList = "cancelBtn visible";
 
   const ingredientsList = document.querySelector("#ingredientsList");
   const appliancesList = document.querySelector("#devicesList");
@@ -30,6 +32,7 @@ const initialize = async () => {
   inputAppareil.addEventListener("input", handleApplianceSearch);
   inputUstensile.addEventListener("input", handleUstensilSearch);
 
+  cancelBtn.addEventListener('click', handleCancel);
   initializeFilters();
   updateFilterLists(recipes);
 };
@@ -50,6 +53,7 @@ const handleSearch = () => {
     return;
   }
 
+
   const searchWords = searchValue.split(" ").filter((word) => word.length >= 2);
   const filteredRecipes = recipes.filter((recipe) => filterRecipe(searchWords, recipe));
 
@@ -60,6 +64,12 @@ const handleSearch = () => {
   updateTagsList(searchWords);
   service.displayRecipes(filteredRecipes);
   updateFilterLists(filteredRecipes);
+};
+
+const handleCancel = () => {
+  searchBar.value = '';
+  cancelBtn.className = "cancelBtn";
+  handleSearch();
 };
 
 const applySearchBarEvents = () => {

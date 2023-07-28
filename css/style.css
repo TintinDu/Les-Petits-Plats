@@ -73,7 +73,7 @@ h4 {
 
 .searchBtn {
   position: relative;
-  right: 65px;
+  right: 80px;
   bottom: 5px;
   width: 51px;
   height: 52px;
@@ -91,6 +91,19 @@ h4 {
 
 .searchBtn:hover line {
   stroke: black;
+}
+
+.cancelBtn {
+  position: relative;
+  right: 100px;
+  bottom: 5px;
+  cursor: text;
+  opacity: 0;
+}
+
+.visible {
+  cursor: pointer;
+  opacity: 1;
 }
 
 .noResults {
@@ -127,6 +140,14 @@ h4 {
   column-gap: 30px;
   display: flex;
   flex-direction: column;
+}
+
+.filterBlock.active {
+  height: 100%;
+}
+
+.filterBlock.active > .filterButton {
+  margin: 15px 0px;
 }
 
 #filterIngredients.active,

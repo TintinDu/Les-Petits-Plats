@@ -134,6 +134,7 @@ const initialize = async () => {
   inputUstensile.addEventListener("input", handleUstensilSearch);
 
   initializeFilters();
+  updateFilterLists(recipes);
 };
 
 document.querySelector("#displayIngredientsList").addEventListener("click", () =>{
@@ -215,6 +216,72 @@ const filterWithTags = () => {
   return filteredRecipes;
 };
 
+const updateFilterLists = (filteredRecipes) => {
+  const filteredIngredients = getFilteredIngredients(filteredRecipes);
+  const filteredAppliances = getFilteredAppliances(filteredRecipes);
+  const filteredUstensils = getFilteredUstensils(filteredRecipes);
+
+  displayFilteredList(filteredIngredients, document.querySelector("#ingredientsList"));
+  displayFilteredList(filteredAppliances, document.querySelector("#devicesList"));
+  displayFilteredList(filteredUstensils, document.querySelector("#ustensilesList"));
+};
+
+const getFilteredIngredients = (recipes) => {
+  const ingredientsSet = new Set();
+
+  recipes.forEach(recipe => {
+    recipe.ingredients.forEach(ingredient => {
+      ingredientsSet.add(ingredient.ingredient.toLowerCase());
+    });
+  });
+
+  return Array.from(ingredientsSet);
+};
+
+const getFilteredAppliances = (recipes) => {
+  const appliancesSet = new Set();
+
+  recipes.forEach(recipe => {
+    appliancesSet.add(recipe.appliance.toLowerCase());
+  });
+
+  return Array.from(appliancesSet);
+};
+
+const getFilteredUstensils = (recipes) => {
+  const ustensilsSet = new Set();
+
+  recipes.forEach(recipe => {
+    recipe.ustensils.forEach(ustensil => {
+      ustensilsSet.add(ustensil.toLowerCase());
+    });
+  });
+
+  return Array.from(ustensilsSet);
+};
+
+searchBar.addEventListener("input", () => {
+  const searchValue = searchBar.value.toLowerCase().trim();
+
+  if (searchValue.length < 3) {
+    noResultsDiv.textContent = "";
+    service.displayRecipes(recipes);
+    updateFilterLists(recipes);
+    return;
+  }
+
+  const searchWords = searchValue.split(" ").filter(word => word.length >= 2);
+  const filteredRecipes = recipes.filter(recipe => filterRecipe(searchWords, recipe));
+
+  if (filteredRecipes.length === 0) {
+    noResults(searchValue);
+  }
+
+  updateTagsList(searchWords);
+  service.displayRecipes(filteredRecipes);
+  updateFilterLists(filteredRecipes); // Update the filter lists based on the filtered recipes
+});
+
 const updateTagsList = (searchWords) => {
   tags = getCombinedIngredients(searchWords);
   displayTags();
@@ -256,13 +323,11 @@ const removeTag = (event) => {
   handleSearch();
 };
 
-
 const handleIngredientFilter = () => {
   const filteredIngredients = searchIngredient(selectedIngredient, service.getIngredientsList(recipes));
   const filteredRecipes = filterRecipesBySelectedIngredients(filteredIngredients);
   service.displayRecipes(filteredRecipes);
 };
-
 
 const handleApplianceFilter = () => {
   const filteredAppliances = searchAppliance(selectedAppliance, service.getAppliancesList(recipes));
@@ -420,6 +485,5 @@ const handleUstensilSearch = () => {
   const filteredRecipes = filterRecipesBySelectedUstensils(filteredUstensils);
   service.displayRecipes(filteredRecipes);
 };
-
 
 initialize();

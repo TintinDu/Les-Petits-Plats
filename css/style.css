@@ -208,7 +208,7 @@ h4 {
   flex-direction: row;
   flex-wrap: wrap;
   column-gap: 20px;
-  row-gap: 15px;
+  row-gap: 5px;
   padding: 5px 0;
   z-index: 1;
 }
@@ -219,6 +219,7 @@ h4 {
 
 .filterList p {
   padding-left: 1em;
+  margin: 0.5em 0;
 }
 .filterList div:hover {
   background-color: #ffd15b;
@@ -357,7 +358,7 @@ h4 {
   margin-top: 4em;
 }
 
-#divTags > button {
+#divTags > div > button {
   background-color: #ffd15b;
   color: #000;
   font-size: 14px;
@@ -365,7 +366,7 @@ h4 {
   border: none;
   padding: 20px 15px;
   border-radius: 10px;
-  margin: 10px 50px 0px 0px;
+  margin: 10px 33px 0px 0px;
   display: inline-block;
   cursor: pointer;
   height: 60px;
@@ -389,5 +390,16 @@ h4 {
   position: absolute;
   top: 9px;
   left: 164px;
+  cursor: pointer;
+}
+
+.miniDivTag {
+  display: flex;
+}
+
+.closeBtnTag {
+  position: relative;
+  right: 70px;
+  top: 5px;
   cursor: pointer;
 }

@@ -54,11 +54,11 @@ document.querySelector("#hideUstensilesList").addEventListener("click", () => {
 });
 document
   .querySelector("#inputIngredient")
-  .addEventListener("input", handleIngredientSearch);
+  .addEventListener("input", () => handleIngredientSearch(recipes));
 document
   .querySelector("#inputAppareil")
-  .addEventListener("input", handleApplianceSearch);
+  .addEventListener("input", () => handleApplianceSearch(recipes));
 document
   .querySelector("#inputUstensile")
-  .addEventListener("input", handleUstensilSearch);
+  .addEventListener("input", () => handleUstensilSearch(recipes));
 document.querySelector(".cancelBtn").addEventListener("click", handleCancel);

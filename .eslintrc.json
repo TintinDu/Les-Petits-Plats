@@ -11,9 +11,12 @@
     },
     "extends": [
       "eslint:recommended",
+      "plugin:import/recommended",
       "plugin:json/recommended"
     ],
     "plugins": [
+      "import",
+      "simple-import-sort",
       "html",
       "json"
   ],

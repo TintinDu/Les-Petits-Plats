@@ -38,9 +38,10 @@ export const handleSearch = (recipes) => {
       service.displayRecipes([]);
     }
 
-    // updateTagsList(searchWords);
     updateFilterLists(filteredRecipes);
     service.displayRecipes(filteredRecipes);
+    initializeFilters(filteredRecipes);
+    // appeler les fonctions de tri autres avec le nouveau tableau
   }
 
   if (searchValue.length < 3) {
@@ -49,6 +50,8 @@ export const handleSearch = (recipes) => {
     updateFilterLists(recipes);
     return;
   }
+
+
 };
 
 export const handleIngredientSearch = (recipes) => {
@@ -75,6 +78,34 @@ export const handleUstensilSearch = (recipes) => {
   searchUstensil(searchValue, service.getUstensilsList(recipes));
 };
 
+const handleTag = (recipes, event, handleFilterFunction, filters) => {
+  const clickedListItem = event.target.closest("div");
+  if (clickedListItem) {
+    console.log("toto");
+    const uncheckFilter = document.createElement("img");
+    uncheckFilter.src = "./images/roundedCross.svg";
+    uncheckFilter.className = "uncheckFilter";
+    clickedListItem.appendChild(uncheckFilter);
+    clickedListItem.className = "activeFilterDiv";
+    event.stopPropagation();
+    const inputValue = clickedListItem.textContent.trim();
+    const filteredRecipes = handleFilterFunction(inputValue, recipes);
+    displayTags(inputValue, filteredRecipes);
+    // if(document.querySelector(".tag")) {
+    //   console.log("toto");
+    //   handleSearch(filteredRecipes);
+    // }
+    // displayFilteredList(service.getIngredientsList(filteredRecipes), ingredientsList);
+    uncheckFilter.addEventListener("click", () => {
+      document.querySelector(".activeFilterDiv").className = "";
+      document.querySelector(".uncheckFilter").remove();
+      removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
+      toggleFiltersList(filters, "hide");
+    });
+    toggleFiltersList(filters, "hide");
+  }
+};
+
 const initializeIngredients = (recipes) => {
   const ingredientsList = document.querySelector("#ingredientsList");
   const inputIngredient = document.querySelector("#inputIngredient");
@@ -90,24 +121,7 @@ const initializeIngredients = (recipes) => {
   });
 
   ingredientsList.addEventListener("click", (event) => {
-    const clickedListItem = event.target.closest("div");
-    if (clickedListItem) {
-      const uncheckFilter = document.createElement("img");
-      uncheckFilter.src = "./images/roundedCross.svg";
-      uncheckFilter.className = "uncheckFilter";
-      clickedListItem.appendChild(uncheckFilter);
-      clickedListItem.className = "activeFilterDiv";
-      uncheckFilter.addEventListener("click", () => {
-        document.querySelector(".activeFilterDiv").className = "";
-        document.querySelector(".uncheckFilter").remove();
-        removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
-      });
-      event.stopPropagation();
-      const inputValue = clickedListItem.textContent.trim();
-      handleIngredientFilter(inputValue, recipes);
-      displayTags(inputValue, recipes);
-      toggleFiltersList("ingredients", "hide");
-    }
+    handleTag(recipes, event, handleIngredientFilter, "ingredients");
   });
 
   displayFilteredList(service.getIngredientsList(recipes), ingredientsList);
@@ -128,24 +142,7 @@ const initializeAppliances = (recipes) => {
   });
 
   appliancesList.addEventListener("click", (event) => {
-    const clickedListItem = event.target.closest("div");
-    if (clickedListItem) {
-      const uncheckFilter = document.createElement("img");
-      uncheckFilter.src = "./images/roundedCross.svg";
-      uncheckFilter.className = "uncheckFilter";
-      clickedListItem.appendChild(uncheckFilter);
-      clickedListItem.className = "activeFilterDiv";
-      uncheckFilter.addEventListener("click", () => {
-        document.querySelector(".activeFilterDiv").className = "";
-        document.querySelector(".uncheckFilter").remove();
-        removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
-      });
-      event.stopPropagation();
-      const inputValue = clickedListItem.textContent.trim();
-      handleApplianceFilter(inputValue, recipes);
-      displayTags(inputValue, recipes);
-      toggleFiltersList("devices", "hide");
-    }
+    handleTag(recipes, event, handleApplianceFilter, "devices");
   });
 
   displayFilteredList(service.getAppliancesList(recipes), appliancesList);
@@ -166,24 +163,7 @@ const initializeUstensils = (recipes) => {
   });
 
   ustensilesList.addEventListener("click", (event) => {
-    const clickedListItem = event.target.closest("div");
-    if (clickedListItem) {
-      const uncheckFilter = document.createElement("img");
-      uncheckFilter.src = "./images/roundedCross.svg";
-      uncheckFilter.className = "uncheckFilter";
-      clickedListItem.appendChild(uncheckFilter);
-      clickedListItem.className = "activeFilterDiv";
-      uncheckFilter.addEventListener("click", () => {
-        document.querySelector(".activeFilterDiv").className = "";
-        document.querySelector(".uncheckFilter").remove();
-        removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
-      });
-      event.stopPropagation();
-      const inputValue = clickedListItem.textContent.trim();
-      handleUstensilFilter(inputValue, recipes);
-      displayTags(inputValue, recipes);
-      toggleFiltersList("ustensiles", "hide");
-    }
+    handleTag(recipes, event, handleUstensilFilter, "ustensils");
   });
 
   displayFilteredList(service.getUstensilsList(recipes), ustensilesList);
@@ -221,9 +201,13 @@ export const noResults = (word) => {
   noResultsDiv.textContent = `Aucune recette ne contient ${word}. Vous pouvez chercher «tarte aux pommes» , «poisson»`;
 };
 
-export const handleCancel = () => {
+export const handleCancel = (recipes) => {
   searchBar.value = "";
   cancelBtn.classList.remove("visible");
+  service.displayRecipes(recipes);
+  if (noResultsDiv.textContent) {
+    noResultsDiv.textContent = "";
+  }
 };
 
 export const displayTags = (inputValue, recipes) => {
@@ -246,6 +230,10 @@ export const displayTags = (inputValue, recipes) => {
     document.querySelector(".uncheckFilter").remove();
     removeTag(event.target.closest("div"), recipes);
   });
+  // if ((document.querySelector(".tag"))) {
+  //   displayTags(inputValue, recipes);
+  // }
+
 
 };
 

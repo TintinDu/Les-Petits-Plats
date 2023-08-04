@@ -57,4 +57,4 @@ document
 document
   .querySelector("#inputUstensile")
   .addEventListener("input", () => handleUstensilSearch(recipes));
-document.querySelector(".cancelBtn").addEventListener("click", handleCancel);
+document.querySelector(".cancelBtn").addEventListener("click", () => handleCancel(recipes));

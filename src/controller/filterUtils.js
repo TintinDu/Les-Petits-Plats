@@ -1,10 +1,5 @@
 // Toutes les fonctions utilitaires pour le filtrage de recettes et les opérations de recherche
 
-import {
-  searchIngredient,
-  searchAppliance,
-  searchUstensil,
-} from "./dataService.js";
 import service from "../models/service.js";
 
 export const filterRecipe = (searchWords, recipe) => {
@@ -30,10 +25,10 @@ export const filterRecipe = (searchWords, recipe) => {
   );
 
   return (
-    hasMatchingTitle ||
-    hasMatchingDescription ||
-    hasMatchingIngredients ||
-    hasMatchingCombinedIngredients
+    hasMatchingTitle || (
+      hasMatchingIngredients ||
+      hasMatchingCombinedIngredients) &&
+      hasMatchingDescription
   );
 };
 
@@ -122,63 +117,50 @@ export const toggleFiltersList = (block, action) => {
   }
 };
 
-export const filterWithTags = (selectedTag, recipes) => {
-  let filteredRecipes = recipes;
-  if (selectedTag === "selectedAppliance") {
-    filteredRecipes = filteredRecipes.filter((recipe) =>
-      recipe.appliance.toLowerCase().includes(selectedTag.toLowerCase()),
-    );
-  }
-  if (selectedTag === "selectedIngredient") {
-    filteredRecipes = filteredRecipes.filter((recipe) =>
-      recipe.ingredients.some((ingredient) =>
-        ingredient.ingredient.toLowerCase().includes(selectedTag.toLowerCase()),
-      ),
-    );
-  }
-  if (selectedTag === "selectedUstensil") {
-    filteredRecipes = filteredRecipes.filter((recipe) =>
-      recipe.ustensils.some((ustensil) =>
-        ustensil.toLowerCase().includes(selectedTag.toLowerCase()),
-      ),
-    );
-  }
-  return filteredRecipes;
-};
+// export const filterWithTags = (selectedTag, recipes) => {
+//   let filteredRecipes = recipes;
+//   if (selectedTag === "selectedAppliance") {
+//     filteredRecipes = filteredRecipes.filter((recipe) =>
+//       recipe.appliance.toLowerCase().includes(selectedTag.toLowerCase()),
+//     );
+//   }
+//   if (selectedTag === "selectedIngredient") {
+//     filteredRecipes = filteredRecipes.filter((recipe) =>
+//       recipe.ingredients.some((ingredient) =>
+//         ingredient.ingredient.toLowerCase().includes(selectedTag.toLowerCase()),
+//       ),
+//     );
+//   }
+//   if (selectedTag === "selectedUstensil") {
+//     filteredRecipes = filteredRecipes.filter((recipe) =>
+//       recipe.ustensils.some((ustensil) =>
+//         ustensil.toLowerCase().includes(selectedTag.toLowerCase()),
+//       ),
+//     );
+//   }
+//   return filteredRecipes;
+// };
 
 export const handleIngredientFilter = (selectedIngredient, recipes) => {
-  const filteredIngredient = searchIngredient(
-    selectedIngredient,
-    service.getIngredientsList(recipes),
-  );
   const filteredRecipes = filterRecipesBySelectedIngredient(
-    filteredIngredient,
+    selectedIngredient,
     recipes,
   );
-  console.log(filteredIngredient);
-  console.log(filteredRecipes);
+  console.log(selectedIngredient);
   service.displayRecipes(filteredRecipes);
 };
 
 export const handleApplianceFilter = (selectedAppliance, recipes) => {
-  const filteredAppliance = searchAppliance(
-    selectedAppliance,
-    service.getAppliancesList(recipes),
-  );
   const filteredRecipes = filterRecipesBySelectedAppliance(
-    filteredAppliance,
+    selectedAppliance,
     recipes,
   );
   service.displayRecipes(filteredRecipes);
 };
 
 export const handleUstensilFilter = (selectedUstensil, recipes) => {
-  const filteredUstensil = searchUstensil(
-    selectedUstensil,
-    service.getUstensilsList(recipes),
-  );
   const filteredRecipes = filterRecipesBySelectedUstensil(
-    filteredUstensil,
+    selectedUstensil,
     recipes,
   );
   service.displayRecipes(filteredRecipes);

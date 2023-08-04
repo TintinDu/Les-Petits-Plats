@@ -1,10 +1,10 @@
 // Toutes les manipulations du DOM et les rendus de fonctions ici (lien avec la vue)
-
 import {
   handleApplianceFilter,
   handleIngredientFilter,
   handleUstensilFilter,
   filterRecipe,
+  toggleFiltersList,
 } from "./filterUtils.js";
 import {
   searchIngredient,
@@ -25,7 +25,7 @@ export const initialize = async (recipes) => {
 export const handleSearch = (recipes) => {
   const searchValue = searchBar.value.toLowerCase().trim();
   noResultsDiv.textContent = "";
-  // cancelBtn.className = "cancelBtn visible";
+  cancelBtn.classList.add("visible");
 
   if (searchValue.length >= 3) {
     const searchWords = searchValue.split(" ").filter((word) => word);
@@ -38,7 +38,6 @@ export const handleSearch = (recipes) => {
       service.displayRecipes([]);
     }
 
-    console.log({ filteredRecipes });
     // updateTagsList(searchWords);
     updateFilterLists(filteredRecipes);
     service.displayRecipes(filteredRecipes);
@@ -96,6 +95,8 @@ const initializeIngredients = (recipes) => {
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
       handleIngredientFilter(inputValue, recipes);
+      displayTags(inputValue, recipes);
+      toggleFiltersList("ingredients", "hide");
     }
   });
 
@@ -122,6 +123,8 @@ const initializeAppliances = (recipes) => {
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
       handleApplianceFilter(inputValue, recipes);
+      displayTags(inputValue, recipes);
+      toggleFiltersList("devices", "hide");
     }
   });
 
@@ -148,6 +151,8 @@ const initializeUstensils = (recipes) => {
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
       handleUstensilFilter(inputValue, recipes);
+      displayTags(inputValue, recipes);
+      toggleFiltersList("ustensiles", "hide");
     }
   });
 
@@ -188,23 +193,30 @@ export const noResults = (word) => {
 
 export const handleCancel = () => {
   searchBar.value = "";
-  cancelBtn.className = "cancelBtn";
+  cancelBtn.classList.remove("visible");
 };
 
-export const displayTags = (tags) => {
+export const displayTags = (inputValue, recipes) => {
   const tagDiv = document.querySelector("#divTags");
-  tagDiv.innerHTML = "";
-  tags.forEach((tag) => {
-    const tagButton = document.createElement("button");
-    tagButton.className = "tag";
-    tagButton.textContent = tag;
-    tagDiv.appendChild(tagButton);
-    tagButton.addEventListener(event, removeTag(event.target, tags));
+
+  const tagButton = document.createElement("button");
+  const tagMiniDiv = document.createElement("div");
+  const closeButton = document.createElement("img");
+  tagMiniDiv.className = "miniDivTag";
+  closeButton.className = "closeBtnTag";
+  closeButton.src = "./images/roundedCross.svg";
+  tagButton.className = "tag";
+  tagButton.textContent = inputValue;
+  tagDiv.appendChild(tagMiniDiv);
+  tagMiniDiv.appendChild(tagButton);
+  tagMiniDiv.appendChild(closeButton);
+  closeButton.addEventListener("click", (event) => {
+    removeTag(event.target.closest("div"), recipes);
   });
+
 };
 
-const removeTag = (tag, tags) => {
-  const clickedTag = tag.textContent;
-  const filteredTags = tags.filter((tag) => tag !== clickedTag);
-  displayTags(filteredTags);
+const removeTag = (tag, recipes) => {
+  tag.innerHTML = "";
+  service.displayRecipes(recipes);
 };

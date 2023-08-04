@@ -146,8 +146,8 @@ export const handleIngredientFilter = (selectedIngredient, recipes) => {
     selectedIngredient,
     recipes,
   );
-  console.log(selectedIngredient);
   service.displayRecipes(filteredRecipes);
+  return filteredRecipes;
 };
 
 export const handleApplianceFilter = (selectedAppliance, recipes) => {
@@ -156,6 +156,7 @@ export const handleApplianceFilter = (selectedAppliance, recipes) => {
     recipes,
   );
   service.displayRecipes(filteredRecipes);
+  return filteredRecipes;
 };
 
 export const handleUstensilFilter = (selectedUstensil, recipes) => {
@@ -164,4 +165,5 @@ export const handleUstensilFilter = (selectedUstensil, recipes) => {
     recipes,
   );
   service.displayRecipes(filteredRecipes);
+  return filteredRecipes;
 };

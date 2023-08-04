@@ -37,10 +37,12 @@ const getPropertyDeep = (obj, path) => {
   return parts.reduce((acc, part) => acc && acc[part], obj);
 };
 
-const getIngredientsList = (recipes) => getListFromProperty(recipes, "ingredients");
-const getUstensilsList = (recipes) => getListFromProperty(recipes, "ustensils");
-const getAppliancesList = (recipes) => getListFromProperty(recipes, "appliance");
+const getIngredientsList = (recipes) =>
+  getListFromProperty(recipes, "ingredients");
 
+const getUstensilsList = (recipes) => getListFromProperty(recipes, "ustensils");
+const getAppliancesList = (recipes) =>
+  getListFromProperty(recipes, "appliance");
 
 const getRecipes = async () => {
   try {
@@ -55,7 +57,7 @@ const getRecipes = async () => {
 
 const displayRecipes = (recipes) => {
   const recipesSection = document.querySelector(".recipes-section");
-  recipesSection.innerHTML = '';
+  recipesSection.innerHTML = "";
 
   recipes.forEach((recipe) => {
     const recipeCardDom = getRecipeCardDom(recipe);
@@ -65,8 +67,9 @@ const displayRecipes = (recipes) => {
 };
 
 const getRecipesNumbers = (recipes) => {
-  const numbersHeader = document.querySelector(".recipes-numbers");
-  numbersHeader.textContent = `${recipes.length} RECETTES`;
+  document.querySelector(
+    ".recipes-numbers",
+  ).textContent = `${recipes.length} RECETTES`;
 };
 
 const service = {
@@ -78,5 +81,3 @@ const service = {
 };
 
 export default service;
-
-

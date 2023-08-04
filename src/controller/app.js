@@ -1,11 +1,7 @@
 // Initialisation + eventlisteners ici
 // C'est le seul fichier qui exécute les fonctions, les autres se contentent d'exporter et de déclarer
 
-// TODO: scroll vertical sur les filtres
 // TODO: rappliquer la fonction de la recherche globale sur la recherche dans le filtre
-// TODO: sur clic d'un filtre on le transforme en tag et on referme la liste
-// TODO: on peut décocher dans la liste le filtre sélectionné
-// TODO: Reset les tags
 
 import {
   initialize,

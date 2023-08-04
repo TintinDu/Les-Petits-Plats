@@ -215,12 +215,23 @@ h4 {
 
 .filterList div {
   width: 100%;
+  display: flex;
 }
 
 .filterList p {
   padding-left: 1em;
   margin: 0.5em 0;
 }
+
+.filterList img {
+  position: relative;
+  left: 55px;
+}
+
+.activeFilterDiv {
+  background-color: #ffd15b;
+}
+
 .filterList div:hover {
   background-color: #ffd15b;
 }
@@ -229,6 +240,13 @@ h4 {
 #filterIngredients .filterList {
   color: black;
   background-color: white;
+}
+
+.filterList {
+  max-height: 315px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 #filterDevices,

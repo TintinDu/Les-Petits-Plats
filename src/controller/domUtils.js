@@ -92,6 +92,16 @@ const initializeIngredients = (recipes) => {
   ingredientsList.addEventListener("click", (event) => {
     const clickedListItem = event.target.closest("div");
     if (clickedListItem) {
+      const uncheckFilter = document.createElement("img");
+      uncheckFilter.src = "./images/roundedCross.svg";
+      uncheckFilter.className = "uncheckFilter";
+      clickedListItem.appendChild(uncheckFilter);
+      clickedListItem.className = "activeFilterDiv";
+      uncheckFilter.addEventListener("click", () => {
+        document.querySelector(".activeFilterDiv").className = "";
+        document.querySelector(".uncheckFilter").remove();
+        removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
+      });
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
       handleIngredientFilter(inputValue, recipes);
@@ -120,6 +130,16 @@ const initializeAppliances = (recipes) => {
   appliancesList.addEventListener("click", (event) => {
     const clickedListItem = event.target.closest("div");
     if (clickedListItem) {
+      const uncheckFilter = document.createElement("img");
+      uncheckFilter.src = "./images/roundedCross.svg";
+      uncheckFilter.className = "uncheckFilter";
+      clickedListItem.appendChild(uncheckFilter);
+      clickedListItem.className = "activeFilterDiv";
+      uncheckFilter.addEventListener("click", () => {
+        document.querySelector(".activeFilterDiv").className = "";
+        document.querySelector(".uncheckFilter").remove();
+        removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
+      });
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
       handleApplianceFilter(inputValue, recipes);
@@ -148,6 +168,16 @@ const initializeUstensils = (recipes) => {
   ustensilesList.addEventListener("click", (event) => {
     const clickedListItem = event.target.closest("div");
     if (clickedListItem) {
+      const uncheckFilter = document.createElement("img");
+      uncheckFilter.src = "./images/roundedCross.svg";
+      uncheckFilter.className = "uncheckFilter";
+      clickedListItem.appendChild(uncheckFilter);
+      clickedListItem.className = "activeFilterDiv";
+      uncheckFilter.addEventListener("click", () => {
+        document.querySelector(".activeFilterDiv").className = "";
+        document.querySelector(".uncheckFilter").remove();
+        removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
+      });
       event.stopPropagation();
       const inputValue = clickedListItem.textContent.trim();
       handleUstensilFilter(inputValue, recipes);
@@ -204,13 +234,16 @@ export const displayTags = (inputValue, recipes) => {
   const closeButton = document.createElement("img");
   tagMiniDiv.className = "miniDivTag";
   closeButton.className = "closeBtnTag";
-  closeButton.src = "./images/roundedCross.svg";
+  closeButton.src = "./images/cross.svg";
   tagButton.className = "tag";
   tagButton.textContent = inputValue;
+  tagButton.id = inputValue;
   tagDiv.appendChild(tagMiniDiv);
   tagMiniDiv.appendChild(tagButton);
   tagMiniDiv.appendChild(closeButton);
   closeButton.addEventListener("click", (event) => {
+    document.querySelector(".activeFilterDiv").className = "";
+    document.querySelector(".uncheckFilter").remove();
     removeTag(event.target.closest("div"), recipes);
   });
 

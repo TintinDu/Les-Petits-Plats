@@ -11,50 +11,81 @@ import {
   handleApplianceSearch,
   handleIngredientSearch,
   handleUstensilSearch,
+  handleTag,
 } from "./domUtils.js";
 import { initializeData } from "./dataService.js";
-import { toggleFiltersList } from "./filterUtils.js";
+import { toggleFiltersList, handleIngredientFilter, handleApplianceFilter, handleUstensilFilter } from "./filterUtils.js";
 
-const recipes = await initializeData();
-initialize(recipes);
-initializeFilters(recipes);
+(async () => {
+  const recipes = await initializeData();
+  let filteredRecipes = recipes;
 
-document.querySelector("#search").addEventListener("input", () => {
-  handleSearch(recipes);
-});
-document
-  .querySelector(".searchBtn")
-  .addEventListener("click", () => handleSearch(recipes));
+  if (recipes.length === filteredRecipes.length) {
+    initialize(filteredRecipes);
+    initializeFilters(filteredRecipes);
+  }
 
-document
-  .querySelector("#displayIngredientsList")
-  .addEventListener("click", () => {
-    toggleFiltersList("ingredients", "display");
+  document.querySelector("#search").addEventListener("input", () => {
+    filteredRecipes = handleSearch(filteredRecipes);
   });
-document.querySelector("#hideIngredientsList").addEventListener("click", () => {
-  toggleFiltersList("ingredients", "hide");
-});
-document.querySelector("#displayDevicesList").addEventListener("click", () => {
-  toggleFiltersList("devices", "display");
-});
-document.querySelector("#hideDevicesList").addEventListener("click", () => {
-  toggleFiltersList("devices", "hide");
-});
-document
-  .querySelector("#displayUstensilesList")
-  .addEventListener("click", () => {
-    toggleFiltersList("ustensiles", "display");
+  document
+    .querySelector(".searchBtn")
+    .addEventListener("click", () =>  {
+      filteredRecipes = handleSearch(filteredRecipes);
+    },
+    );
+
+  document.querySelector("#ingredientsList").addEventListener("click", (event) => {
+    filteredRecipes = handleTag(filteredRecipes, event, handleIngredientFilter, "ingredients");
   });
-document.querySelector("#hideUstensilesList").addEventListener("click", () => {
-  toggleFiltersList("ustensiles", "hide");
-});
-document
-  .querySelector("#inputIngredient")
-  .addEventListener("input", () => handleIngredientSearch(recipes));
-document
-  .querySelector("#inputAppareil")
-  .addEventListener("input", () => handleApplianceSearch(recipes));
-document
-  .querySelector("#inputUstensile")
-  .addEventListener("input", () => handleUstensilSearch(recipes));
-document.querySelector(".cancelBtn").addEventListener("click", () => handleCancel(recipes));
+  document.querySelector("#devicesList").addEventListener("click", (event) => {
+    filteredRecipes = handleTag(filteredRecipes, event, handleApplianceFilter, "devices");
+  });
+  document.querySelector("#ustensilesList").addEventListener("click", (event) => {
+    filteredRecipes = handleTag(filteredRecipes, event, handleUstensilFilter, "ustensiles");
+  });
+
+  document
+    .querySelector("#displayIngredientsList")
+    .addEventListener("click", () => {
+      toggleFiltersList("ingredients", "display");
+    });
+  document.querySelector("#hideIngredientsList").addEventListener("click", () => {
+    toggleFiltersList("ingredients", "hide");
+  });
+  document.querySelector("#displayDevicesList").addEventListener("click", () => {
+    toggleFiltersList("devices", "display");
+  });
+  document.querySelector("#hideDevicesList").addEventListener("click", () => {
+    toggleFiltersList("devices", "hide");
+  });
+  document
+    .querySelector("#displayUstensilesList")
+    .addEventListener("click", () => {
+      toggleFiltersList("ustensiles", "display");
+    });
+  document.querySelector("#hideUstensilesList").addEventListener("click", () => {
+    toggleFiltersList("ustensiles", "hide");
+  });
+  document
+    .querySelector("#inputIngredient")
+    .addEventListener("input", () => {
+      handleIngredientSearch(filteredRecipes);
+    });
+  document
+    .querySelector("#inputAppareil")
+    .addEventListener("input", () =>
+    {
+      handleApplianceSearch(filteredRecipes);
+    });
+  document
+    .querySelector("#inputUstensile")
+    .addEventListener("input", () =>
+    {
+      handleUstensilSearch(filteredRecipes);
+    });
+  document.querySelector(".cancelBtn").addEventListener("click", () => {
+    filteredRecipes = handleCancel(recipes);
+  });
+
+})();

@@ -23,11 +23,11 @@ import {
   handleApplianceFilter,
   handleUstensilFilter,
 } from "./filterUtils.js";
-import service from "../models/service.js";
+// import service from "../models/service.js";
 
 (async () => {
   const recipes = await initializeData();
-  const ingredients = service.getIngredientsList(recipes);
+  // const ingredients = service.getIngredientsList(recipes);
   let filteredRecipes = recipes;
 
   if (recipes.length === filteredRecipes.length) {
@@ -144,7 +144,7 @@ import service from "../models/service.js";
     .forEach((element) =>
       element.addEventListener("click", (event) => {
         filteredRecipes = handleTag(
-          filteredRecipes,
+          recipes,
           event,
           handleIngredientFilter,
           "ingredients",
@@ -156,7 +156,7 @@ import service from "../models/service.js";
     .forEach((element) =>
       element.addEventListener("click", (event) => {
         filteredRecipes = handleTag(
-          filteredRecipes,
+          recipes,
           event,
           handleApplianceFilter,
           "devices",
@@ -168,7 +168,7 @@ import service from "../models/service.js";
     .forEach((element) =>
       element.addEventListener("click", (event) => {
         filteredRecipes = handleTag(
-          filteredRecipes,
+          recipes,
           event,
           handleUstensilFilter,
           "ustensiles",
@@ -188,7 +188,6 @@ import service from "../models/service.js";
               event,
               handleIngredientFilter,
               "ingredients",
-              ingredients,
             );
           }),
         );

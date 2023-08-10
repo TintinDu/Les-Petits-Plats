@@ -75,7 +75,6 @@ export const handleUstensilSearch = (recipes) => {
 export const handleTag = (recipes, event, handleFilterFunction, filters) => {
   const clickedListItem = event.target.closest("div");
   if (clickedListItem) {
-    console.log(clickedListItem);
 
     const uncheckFilter = document.createElement("img");
     uncheckFilter.src = "./images/roundedCross.svg";

@@ -1,8 +1,5 @@
 // Toutes les manipulations du DOM et les rendus de fonctions ici (lien avec la vue)
 import {
-  handleApplianceFilter,
-  handleIngredientFilter,
-  handleUstensilFilter,
   filterRecipe,
   toggleFiltersList,
 } from "./filterUtils.js";
@@ -35,20 +32,21 @@ export const handleSearch = (recipes) => {
 
     if (filteredRecipes.length === 0) {
       noResults(searchValue);
-      service.displayRecipes([]);
+      initialize([]);
     }
 
     updateFilterLists(filteredRecipes);
-    service.displayRecipes(filteredRecipes);
+    initialize(filteredRecipes);
     initializeFilters(filteredRecipes);
     // appeler les fonctions de tri autres avec le nouveau tableau
+    return filteredRecipes;
   }
 
   if (searchValue.length < 3) {
     noResultsDiv.textContent = "";
-    service.displayRecipes(recipes);
+    initialize(recipes);
     updateFilterLists(recipes);
-    return;
+    return recipes;
   }
 
 
@@ -75,13 +73,12 @@ export const handleUstensilSearch = (recipes) => {
     .querySelector("#inputUstensile")
     .value.toLowerCase()
     .trim();
-  searchUstensil(searchValue, service.getUstensilsList(recipes));
+  return searchUstensil(searchValue, service.getUstensilsList(recipes));
 };
 
-const handleTag = (recipes, event, handleFilterFunction, filters) => {
+export const handleTag = (recipes, event, handleFilterFunction, filters) => {
   const clickedListItem = event.target.closest("div");
   if (clickedListItem) {
-    console.log("toto");
     const uncheckFilter = document.createElement("img");
     uncheckFilter.src = "./images/roundedCross.svg";
     uncheckFilter.className = "uncheckFilter";
@@ -90,19 +87,23 @@ const handleTag = (recipes, event, handleFilterFunction, filters) => {
     event.stopPropagation();
     const inputValue = clickedListItem.textContent.trim();
     const filteredRecipes = handleFilterFunction(inputValue, recipes);
-    displayTags(inputValue, filteredRecipes);
-    // if(document.querySelector(".tag")) {
-    //   console.log("toto");
-    //   handleSearch(filteredRecipes);
-    // }
-    // displayFilteredList(service.getIngredientsList(filteredRecipes), ingredientsList);
+    const closeTagBtn = displayTags(inputValue, filteredRecipes);
+
     uncheckFilter.addEventListener("click", () => {
       document.querySelector(".activeFilterDiv").className = "";
       document.querySelector(".uncheckFilter").remove();
       removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
       toggleFiltersList(filters, "hide");
+      handleFilterFunction("", recipes);
+    });
+    closeTagBtn.addEventListener("click", (event) => {
+      document.querySelector(".activeFilterDiv").className = "";
+      document.querySelector(".uncheckFilter").remove();
+      removeTag(event.target.parentElement, recipes);
+      handleFilterFunction("", recipes);
     });
     toggleFiltersList(filters, "hide");
+    return filteredRecipes;
   }
 };
 
@@ -118,10 +119,6 @@ const initializeIngredients = (recipes) => {
       service.getIngredientsList(recipes),
     );
     displayFilteredList(filteredIngredients, ingredientsList);
-  });
-
-  ingredientsList.addEventListener("click", (event) => {
-    handleTag(recipes, event, handleIngredientFilter, "ingredients");
   });
 
   displayFilteredList(service.getIngredientsList(recipes), ingredientsList);
@@ -141,10 +138,6 @@ const initializeAppliances = (recipes) => {
     displayFilteredList(filteredAppliances, appliancesList);
   });
 
-  appliancesList.addEventListener("click", (event) => {
-    handleTag(recipes, event, handleApplianceFilter, "devices");
-  });
-
   displayFilteredList(service.getAppliancesList(recipes), appliancesList);
 };
 
@@ -159,14 +152,10 @@ const initializeUstensils = (recipes) => {
       searchValue,
       service.getUstensilsList(recipes),
     );
-    displayFilteredList(filteredUstensils, ustensilesList);
+    return displayFilteredList(filteredUstensils, ustensilesList);
   });
 
-  ustensilesList.addEventListener("click", (event) => {
-    handleTag(recipes, event, handleUstensilFilter, "ustensils");
-  });
-
-  displayFilteredList(service.getUstensilsList(recipes), ustensilesList);
+  return displayFilteredList(service.getUstensilsList(recipes), ustensilesList);
 };
 
 export const initializeFilters = (recipes) => {
@@ -185,6 +174,7 @@ export const displayFilteredList = (filteredList, listContainer) => {
     listContainer.appendChild(div);
 
     listContainer.addEventListener("click", (event) => {
+      console.log(event.target);
       const clickedListItem = event.target.closest("div");
       if (clickedListItem) {
         event.stopPropagation();
@@ -204,13 +194,13 @@ export const noResults = (word) => {
 export const handleCancel = (recipes) => {
   searchBar.value = "";
   cancelBtn.classList.remove("visible");
-  service.displayRecipes(recipes);
   if (noResultsDiv.textContent) {
     noResultsDiv.textContent = "";
   }
+  return initialize(recipes);
 };
 
-export const displayTags = (inputValue, recipes) => {
+export const displayTags = (inputValue) => {
   const tagDiv = document.querySelector("#divTags");
 
   const tagButton = document.createElement("button");
@@ -225,19 +215,11 @@ export const displayTags = (inputValue, recipes) => {
   tagDiv.appendChild(tagMiniDiv);
   tagMiniDiv.appendChild(tagButton);
   tagMiniDiv.appendChild(closeButton);
-  closeButton.addEventListener("click", (event) => {
-    document.querySelector(".activeFilterDiv").className = "";
-    document.querySelector(".uncheckFilter").remove();
-    removeTag(event.target.closest("div"), recipes);
-  });
-  // if ((document.querySelector(".tag"))) {
-  //   displayTags(inputValue, recipes);
-  // }
 
-
+  return closeButton;
 };
 
 const removeTag = (tag, recipes) => {
   tag.innerHTML = "";
-  service.displayRecipes(recipes);
+  initialize(recipes);
 };

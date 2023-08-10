@@ -117,30 +117,6 @@ export const toggleFiltersList = (block, action) => {
   }
 };
 
-// export const filterWithTags = (selectedTag, recipes) => {
-//   let filteredRecipes = recipes;
-//   if (selectedTag === "selectedAppliance") {
-//     filteredRecipes = filteredRecipes.filter((recipe) =>
-//       recipe.appliance.toLowerCase().includes(selectedTag.toLowerCase()),
-//     );
-//   }
-//   if (selectedTag === "selectedIngredient") {
-//     filteredRecipes = filteredRecipes.filter((recipe) =>
-//       recipe.ingredients.some((ingredient) =>
-//         ingredient.ingredient.toLowerCase().includes(selectedTag.toLowerCase()),
-//       ),
-//     );
-//   }
-//   if (selectedTag === "selectedUstensil") {
-//     filteredRecipes = filteredRecipes.filter((recipe) =>
-//       recipe.ustensils.some((ustensil) =>
-//         ustensil.toLowerCase().includes(selectedTag.toLowerCase()),
-//       ),
-//     );
-//   }
-//   return filteredRecipes;
-// };
-
 export const handleIngredientFilter = (selectedIngredient, recipes) => {
   const filteredRecipes = filterRecipesBySelectedIngredient(
     selectedIngredient,

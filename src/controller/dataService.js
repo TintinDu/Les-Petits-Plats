@@ -1,7 +1,6 @@
 // Uniquement manipulation des données
 
 import { displayFilteredList } from "./domUtils.js";
-// import { filterWithTags } from "./filterUtils.js";
 import service from "../models/service.js";
 
 export const initializeData = async () => {
@@ -61,32 +60,6 @@ const getFilteredUstensils = (recipes) => {
 
   return Array.from(ustensilsSet);
 };
-
-// export const updateTagsList = (searchWords, recipes) => {
-//   const tags = getCombinedIngredients(searchWords, recipes);
-//   const filteredRecipes = filterWithTags(tags, recipes);
-//   service.displayRecipes(filteredRecipes);
-// };
-
-// const getCombinedIngredients = (searchWords, recipes) => {
-//   const combinedIngredients = [];
-//   const lowerCaseIngredients = service
-//     .getIngredientsList(recipes)
-//     .map((ingredient) => ingredient.toLowerCase());
-
-//   searchWords.forEach((word) => {
-//     lowerCaseIngredients.forEach((ingredient) => {
-//       if (
-//         ingredient.toLowerCase().includes(word) &&
-//         !combinedIngredients.includes(ingredient)
-//       ) {
-//         combinedIngredients.push(ingredient);
-//       }
-//     });
-//   });
-
-//   return combinedIngredients;
-// };
 
 export const searchIngredient = (ingredient, ingredients) => {
   const searchValue = ingredient;

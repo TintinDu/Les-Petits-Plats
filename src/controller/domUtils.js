@@ -192,4 +192,5 @@ export const displayTags = (inputValue) => {
 const removeTag = (tag, recipes) => {
   tag.innerHTML = "";
   initialize(recipes);
+  updateFilterLists(recipes);
 };

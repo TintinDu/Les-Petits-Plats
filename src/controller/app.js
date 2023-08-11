@@ -27,8 +27,14 @@ import {
 
 (async () => {
   const recipes = await initializeData();
-  // const ingredients = service.getIngredientsList(recipes);
   let filteredRecipes = recipes;
+
+  // const ingredients = service.getIngredientsList(recipes);
+  // const appliances = service.getAppliancesList(recipes);
+  // const ustensils = service.getUstensilsList(recipes);
+  // let filteredIngredients = ingredients;
+  // let filteredAppliances = appliances;
+  // let filteredUstensils = ustensils;
 
   if (recipes.length === filteredRecipes.length) {
     initialize(filteredRecipes);
@@ -59,6 +65,7 @@ import {
               handleIngredientFilter,
               "ingredients",
             );
+            updateFilterLists(filteredRecipes);
           }),
         );
 
@@ -72,6 +79,7 @@ import {
               handleApplianceFilter,
               "devices",
             );
+            updateFilterLists(filteredRecipes);
           }),
         );
 
@@ -85,12 +93,14 @@ import {
               handleUstensilFilter,
               "ustensiles",
             );
+            updateFilterLists(filteredRecipes);
           }),
         );
 
       document
         .querySelector(".cancelBtn").addEventListener("click", async () => {
           filteredRecipes = await handleCancel(recipes);
+          updateFilterLists(filteredRecipes);
         });
     });
 
@@ -149,6 +159,7 @@ import {
           handleIngredientFilter,
           "ingredients",
         );
+        updateFilterLists(filteredRecipes);
       }),
     );
   document
@@ -161,6 +172,7 @@ import {
           handleApplianceFilter,
           "devices",
         );
+        updateFilterLists(filteredRecipes);
       }),
     );
   document
@@ -173,6 +185,7 @@ import {
           handleUstensilFilter,
           "ustensiles",
         );
+        updateFilterLists(filteredRecipes);
       }),
     );
   document

@@ -55,47 +55,6 @@ import {
         initialize(filteredRecipes);
         updateFilterLists(filteredRecipes);
       }
-      document
-        .querySelector("#ingredientsList").childNodes
-        .forEach((element) =>
-          element.addEventListener("click", (event) => {
-            filteredRecipes = handleTag(
-              filteredRecipes,
-              event,
-              handleIngredientFilter,
-              "ingredients",
-            );
-            updateFilterLists(filteredRecipes);
-          }),
-        );
-
-      document
-        .querySelector("#devicesList").childNodes
-        .forEach((element) =>
-          element.addEventListener("click", (event) => {
-            filteredRecipes = handleTag(
-              filteredRecipes,
-              event,
-              handleApplianceFilter,
-              "devices",
-            );
-            updateFilterLists(filteredRecipes);
-          }),
-        );
-
-      document
-        .querySelector("#ustensilesList").childNodes
-        .forEach((element) =>
-          element.addEventListener("click", (event) => {
-            filteredRecipes = handleTag(
-              filteredRecipes,
-              event,
-              handleUstensilFilter,
-              "ustensiles",
-            );
-            updateFilterLists(filteredRecipes);
-          }),
-        );
 
       document
         .querySelector(".cancelBtn").addEventListener("click", async () => {
@@ -150,94 +109,62 @@ import {
     });
 
   document
-    .querySelector("#ingredientsList").childNodes
-    .forEach((element) =>
-      element.addEventListener("click", (event) => {
+    .querySelector("#ingredientsList")
+    .addEventListener("click", (event) => {
+      const clickedListItem = event.target.closest("div");
+      if (clickedListItem.className !== "filterList") {
         filteredRecipes = handleTag(
-          recipes,
+          filteredRecipes,
           event,
           handleIngredientFilter,
           "ingredients",
         );
         updateFilterLists(filteredRecipes);
-      }),
+      }
+    },
     );
   document
-    .querySelector("#devicesList").childNodes
-    .forEach((element) =>
-      element.addEventListener("click", (event) => {
+    .querySelector("#devicesList")
+    .addEventListener("click", (event) => {
+      const clickedListItem = event.target.closest("div");
+      if (clickedListItem.className !== "filterList") {
         filteredRecipes = handleTag(
-          recipes,
+          filteredRecipes,
           event,
           handleApplianceFilter,
           "devices",
         );
         updateFilterLists(filteredRecipes);
-      }),
-    );
+      }}),
+
   document
-    .querySelector("#ustensilesList").childNodes
-    .forEach((element) =>
-      element.addEventListener("click", (event) => {
+    .querySelector("#ustensilesList")
+    .addEventListener("click", (event) => {
+      const clickedListItem = event.target.closest("div");
+      if (clickedListItem.className !== "filterList") {
         filteredRecipes = handleTag(
-          recipes,
+          filteredRecipes,
           event,
           handleUstensilFilter,
           "ustensiles",
         );
         updateFilterLists(filteredRecipes);
-      }),
-    );
+      }}),
+
   document
     .querySelector("#inputIngredient")
     .addEventListener("input", () => {
       handleIngredientSearch(filteredRecipes);
-      document
-        .querySelector("#ingredientsList").childNodes
-        .forEach((element) =>
-          element.addEventListener("click", (event) => {
-            filteredRecipes = handleTag(
-              filteredRecipes,
-              event,
-              handleIngredientFilter,
-              "ingredients",
-            );
-          }),
-        );
     });
   document
     .querySelector("#inputAppareil")
     .addEventListener("input", () => {
       handleApplianceSearch(filteredRecipes);
-      document
-        .querySelector("#devicesList").childNodes
-        .forEach((element) =>
-          element.addEventListener("click", (event) => {
-            filteredRecipes = handleTag(
-              filteredRecipes,
-              event,
-              handleApplianceFilter,
-              "devices",
-            );
-          }),
-        );
     });
   document
     .querySelector("#inputUstensile")
     .addEventListener("input", () => {
       handleUstensilSearch(filteredRecipes);
-      document
-        .querySelector("#ustensilesList").childNodes
-        .forEach((element) =>
-          element.addEventListener("click", (event) => {
-            filteredRecipes = handleTag(
-              filteredRecipes,
-              event,
-              handleUstensilFilter,
-              "ustensiles",
-            );
-          }),
-        );
     });
 
 })();

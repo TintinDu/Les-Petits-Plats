@@ -38,9 +38,9 @@ L'enchaînement A3 commence au point 9 du scénario nominal. Cet enchaînement p
 
 1. L’utilisateur précise sa recherche grâce à l’un des champs : ingrédients, ustensiles,appareil. ✅
 2. Au fur et à mesure du remplissage les mots clés ne correspondant pas à la frappe dans le champ disparaissent ✅
-3. L’utilisateur choisit un mot clé dans le champ ❌
-4. Le mot clé apparaît sous forme de tag sous la recherche principale ❌
-5. Les résultats de recherche sont actualisés, ainsi que les éléments disponibles dans les champs de recherche avancée ❌
+3. L’utilisateur choisit un mot clé dans le champ ✅
+4. Le mot clé apparaît sous forme de tag sous la recherche principale ✅
+5. Les résultats de recherche sont actualisés, ainsi que les éléments disponibles dans les champs de recherche avancée ✅
 
 Règles de gestion
 Ces points doivent absolument être respectés durant le développement:
@@ -53,3 +53,7 @@ Ces points doivent absolument être respectés durant le développement:
 6. Les retours de recherche doivent être une intersection des résultats. Si l’on ajoute les tags “coco” et “chocolat” dans les ingrédients, on doit récupérer les recettes qui ont à la fois de la coco et du chocolat. ✅
 7. Comme pour le reste du site, le code HTML et CSS pour l’interface devra passer avec succès le validateur W3C. ??
 8. Aucune librairie ne sera utilisée pour le JavaScript du moteur de recherche. ✅
+
+TODO: Garder les filtres quand le champ recherche est réinitialisé ❌
+TODO: Maintenir le background color jaune et la petite croix de l'item sélectionné dans la liste ❌
+TODO: Parfois quand on retire un filtre, il n'est pas prix en compte ❌

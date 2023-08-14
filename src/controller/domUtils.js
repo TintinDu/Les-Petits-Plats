@@ -8,6 +8,7 @@ import {
   searchAppliance,
   searchUstensil,
   updateFilterLists,
+  initializeData,
 } from "./dataService.js";
 import service from "../models/service.js";
 
@@ -75,38 +76,46 @@ export const handleUstensilSearch = (recipes) => {
 export const handleTag = (recipes, event, handleFilterFunction, filters) => {
   const clickedListItem = event.target.closest("div");
   if (clickedListItem) {
-
-    const uncheckFilter = document.createElement("img");
-    uncheckFilter.src = "./images/roundedCross.svg";
-    uncheckFilter.className = "uncheckFilter";
-    clickedListItem.appendChild(uncheckFilter);
-    clickedListItem.className = "activeFilterDiv";
-    // event.stopPropagation();
     const inputValue = clickedListItem.textContent.trim();
-    const filteredRecipes = handleFilterFunction(inputValue, recipes);
+    let filteredRecipes = handleFilterFunction(inputValue, recipes);
     const closeTagBtn = displayTags(inputValue, filteredRecipes);
-
-    uncheckFilter.addEventListener("click", () => {
-      document.querySelector(".activeFilterDiv").className = "";
-      document.querySelector(".uncheckFilter").remove();
-      removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
-      toggleFiltersList(filters, "hide");
-      handleFilterFunction("", recipes);
-    });
     closeTagBtn.addEventListener("click", (event) => {
+      console.log(filteredRecipes);
       if(document.querySelector(".activeFilterDiv")){
         document.querySelector(".activeFilterDiv").className = "";
       }
       if(document.querySelector(".uncheckFilter")) {
         document.querySelector(".uncheckFilter").remove();
       }
-      removeTag(event.target.parentElement, recipes);
+      filteredRecipes = removeTag(event.target.parentElement, recipes);
       handleFilterFunction("", recipes);
     });
     toggleFiltersList(filters, "hide");
     return filteredRecipes;
   }
 };
+
+export const handleSelectedListElement = (recipes, event, handleFilterFunction, filters) => {
+  const clickedListItem = event.target.closest("div");
+  if (clickedListItem) {
+    const filterId = clickedListItem.getAttribute("data-filter-id");
+    const uncheckFilter = document.createElement("img");
+    uncheckFilter.src = "./images/roundedCross.svg";
+    uncheckFilter.className = "uncheckFilter";
+    clickedListItem.appendChild(uncheckFilter);
+    clickedListItem.classList.add("activeFilterDiv");
+
+    uncheckFilter.addEventListener("click", () => {
+      clickedListItem.classList.remove("activeFilterDiv");
+      uncheckFilter.remove();
+      removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
+      toggleFiltersList(filters, "hide");
+      handleFilterFunction("", recipes);
+    });
+    return filterId;
+  }
+};
+
 
 const initializeIngredients = (recipes) => {
   const ingredientsList = document.querySelector("#ingredientsList");
@@ -142,6 +151,7 @@ export const displayFilteredList = (filteredList, listContainer) => {
     const p = document.createElement("p");
     p.innerText = item;
     div.appendChild(p);
+    div.setAttribute("data-filter-id", `${p.innerText}`);
     listContainer.appendChild(div);
 
     listContainer.addEventListener("click", (event) => {
@@ -189,8 +199,19 @@ export const displayTags = (inputValue) => {
   return closeButton;
 };
 
-const removeTag = (tag, recipes) => {
+export const removeTag = async (tag, recipes) => {
   tag.innerHTML = "";
-  initialize(recipes);
+  // initializeFilters(recipes);
+  const filteredRecipes = initialize(recipes);
   updateFilterLists(recipes);
+
+  if(!(document.querySelector(".tag"))&& (searchBar.value.length === 0)){
+    const reinitializedRecipes = await initializeData();
+    initialize(reinitializedRecipes);
+    updateFilterLists(reinitializedRecipes);
+    return reinitializedRecipes;
+  }
+
+  return filteredRecipes;
+
 };

@@ -1,8 +1,3 @@
-// Initialisation + eventlisteners ici
-// C'est le seul fichier qui exécute les fonctions, les autres se contentent d'exporter et de déclarer
-
-// TODO: rappliquer la fonction de la recherche globale sur la recherche dans le filtre
-
 import {
   initialize,
   initializeFilters,
@@ -25,20 +20,11 @@ import {
   handleApplianceFilter,
   handleUstensilFilter,
 } from "./filterUtils.js";
-// import service from "../models/service.js";
 
 (async () => {
 
   const recipes = await initializeData();
   let filteredRecipes = recipes;
-  const selectedFilterIds = [];
-
-  // const ingredients = service.getIngredientsList(recipes);
-  // const appliances = service.getAppliancesList(recipes);
-  // const ustensils = service.getUstensilsList(recipes);
-  // let filteredIngredients = ingredients;
-  // let filteredAppliances = appliances;
-  // let filteredUstensils = ustensils;
 
   if (recipes.length === filteredRecipes.length) {
     initialize(filteredRecipes);
@@ -54,7 +40,7 @@ import {
         .value.toLowerCase()
         .trim();
       if (searchValue.length >= 3) {
-        filteredRecipes = handleSearch(filteredRecipes);
+        filteredRecipes = handleSearch(filteredRecipes, document.querySelectorAll(".tag"));
       } else if (searchValue.length < 3) {
         document.querySelector(".noResults").textContent = "";
         initialize(filteredRecipes);
@@ -125,7 +111,7 @@ import {
     .addEventListener("click", async (event) => {
       const clickedListItem = event.target.closest("div");
       if (clickedListItem && clickedListItem.className !== "filterList") {
-        filteredRecipes = handleTag(
+        const closeTagBtn = handleTag(
           filteredRecipes,
           event,
           handleIngredientFilter,
@@ -133,14 +119,10 @@ import {
         );
 
         const filterId = handleSelectedListElement(
-          filteredRecipes,
           event,
-          handleIngredientFilter,
-          "ingredients",
         );
 
         updateFilterLists(filteredRecipes);
-        console.log(filterId);
 
         const activeFilterDiv = document.querySelector(`[data-filter-id="${filterId}"]`);
         if (activeFilterDiv) {
@@ -150,15 +132,25 @@ import {
           uncheckFilter.className = "uncheckFilter";
           activeFilterDiv.appendChild(uncheckFilter);
           if (uncheckFilter) {
-            uncheckFilter.addEventListener("click", () => {
+            uncheckFilter.addEventListener("click", async () => {
               activeFilterDiv.classList.remove("activeFilterDiv");
               uncheckFilter.remove();
               const tagText = activeFilterDiv.querySelector("p").innerText.trim();
-              removeTag(document.getElementById(`${tagText}`).parentElement, recipes);
+              filteredRecipes = await removeTag(document.getElementById(`${tagText}`).parentElement, filteredRecipes);
               toggleFiltersList("ingredients", "hide");
             });
           }
         }
+        closeTagBtn.addEventListener("click", async (event) => {
+          if(document.querySelector(".activeFilterDiv")){
+            document.querySelector(".activeFilterDiv").className = "";
+          }
+          if(document.querySelector(".uncheckFilter")) {
+            document.querySelector(".uncheckFilter").remove();
+          }
+          filteredRecipes = await removeTag(event.target.parentElement, filteredRecipes);
+          toggleFiltersList("ingredients", "hide");
+        });
       }
     });
 
@@ -166,8 +158,8 @@ import {
     .querySelector("#devicesList")
     .addEventListener("click", (event) => {
       const clickedListItem = event.target.closest("div");
-      if (clickedListItem.className !== "filterList") {
-        filteredRecipes = handleTag(
+      if (clickedListItem && clickedListItem.className !== "filterList") {
+        const closeTagBtn = handleTag(
           filteredRecipes,
           event,
           handleApplianceFilter,
@@ -175,10 +167,7 @@ import {
         );
 
         const filterId = handleSelectedListElement(
-          filteredRecipes,
           event,
-          handleApplianceFilter,
-          "devices",
         );
 
         updateFilterLists(filteredRecipes);
@@ -191,42 +180,43 @@ import {
           uncheckFilter.className = "uncheckFilter";
           activeFilterDiv.appendChild(uncheckFilter);
           if (uncheckFilter) {
-            uncheckFilter.addEventListener("click", () => {
+            uncheckFilter.addEventListener("click", async () => {
               activeFilterDiv.classList.remove("activeFilterDiv");
               uncheckFilter.remove();
               const tagText = activeFilterDiv.querySelector("p").innerText.trim();
-              removeTag(document.getElementById(`${tagText}`).parentElement, recipes);
+              filteredRecipes = await removeTag(document.getElementById(`${tagText}`).parentElement, filteredRecipes);
               toggleFiltersList("devices", "hide");
             });
           }
         }
+        closeTagBtn.addEventListener("click", async (event) => {
+          if(document.querySelector(".activeFilterDiv")){
+            document.querySelector(".activeFilterDiv").className = "";
+          }
+          if(document.querySelector(".uncheckFilter")) {
+            document.querySelector(".uncheckFilter").remove();
+          }
+          filteredRecipes = await removeTag(event.target.parentElement, filteredRecipes);
+          toggleFiltersList("devices", "hide");
+        });
       }}),
 
   document
     .querySelector("#ustensilesList")
     .addEventListener("click", (event) => {
       const clickedListItem = event.target.closest("div");
-      if (clickedListItem.className !== "filterList") {
-        filteredRecipes = handleTag(
+      if (clickedListItem && clickedListItem.className !== "filterList") {
+        const closeTagBtn = handleTag(
           filteredRecipes,
           event,
           handleUstensilFilter,
           "ustensiles",
         );
         const filterId = handleSelectedListElement(
-          filteredRecipes,
           event,
-          handleUstensilFilter,
-          "ustensiles",
         );
 
         updateFilterLists(filteredRecipes);
-
-        if (selectedFilterIds.includes(filterId)) {
-          selectedFilterIds.splice(selectedFilterIds.indexOf(filterId), 1);
-        } else {
-          selectedFilterIds.push(filterId);
-        }
 
         const activeFilterDiv = document.querySelector(`[data-filter-id="${filterId}"]`);
         if (activeFilterDiv) {
@@ -236,16 +226,25 @@ import {
           uncheckFilter.className = "uncheckFilter";
           activeFilterDiv.appendChild(uncheckFilter);
           if (uncheckFilter) {
-            uncheckFilter.addEventListener("click", () => {
+            uncheckFilter.addEventListener("click", async () => {
               activeFilterDiv.classList.remove("activeFilterDiv");
               uncheckFilter.remove();
               const tagText = activeFilterDiv.querySelector("p").innerText.trim();
-              removeTag(document.getElementById(`${tagText}`).parentElement, recipes);
+              filteredRecipes = await removeTag(document.getElementById(`${tagText}`).parentElement, filteredRecipes);
               toggleFiltersList("ustensiles", "hide");
-              selectedFilterIds.splice(selectedFilterIds.indexOf(filterId), 1);
             });
           }
         }
+        closeTagBtn.addEventListener("click", async (event) => {
+          if(document.querySelector(".activeFilterDiv")){
+            document.querySelector(".activeFilterDiv").className = "";
+          }
+          if(document.querySelector(".uncheckFilter")) {
+            document.querySelector(".uncheckFilter").remove();
+          }
+          filteredRecipes = await removeTag(event.target.parentElement, filteredRecipes);
+          toggleFiltersList("ustensiles", "hide");
+        });
       }}),
 
   document
@@ -264,3 +263,4 @@ import {
       handleUstensilSearch(filteredRecipes);
     });
 })();
+

@@ -1,5 +1,3 @@
-// Uniquement manipulation des données
-
 import { displayFilteredList } from "./domUtils.js";
 import service from "../models/service.js";
 

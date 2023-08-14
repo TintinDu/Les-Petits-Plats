@@ -1,8 +1,7 @@
-// Toutes les fonctions utilitaires pour le filtrage de recettes et les opérations de recherche
-
 import service from "../models/service.js";
 
 export const filterRecipe = (searchWords, recipe) => {
+
   const lowerCaseIngredients = recipe.ingredients.map((ingredient) =>
     ingredient.ingredient.toLowerCase(),
   );

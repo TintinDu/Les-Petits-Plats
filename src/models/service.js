@@ -1,12 +1,3 @@
-// faire d'abord la recherche simple puis avancée avec javascript fonctionnel
-// filter / map / some pour la recherche avancée
-// rester bien sur des tableaux
-// pour chaque fonction lui passer les arguments et ne pas avoir plein de tableaux stockés en global
-
-// ensuite passer sur l'algo 2 quand tout fonctionne pour ne pas avoir à faire de modifs
-
-// passer les tests W3C
-
 import getRecipeCardDom from "../views/factories/recipeCardFactory.js";
 
 const getListFromProperty = (recipes, property) => {

@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: "Manrope", sans-serif;
   color: #000000;
@@ -20,6 +25,10 @@ h4 {
   font-size: 12px;
   margin: 1em 0;
   letter-spacing: 1px;
+}
+
+input {
+  font-family: "Manrope", sans-serif;
 }
 
 #header {
@@ -47,9 +56,11 @@ h4 {
 }
 
 .welcome-text {
-  margin: 6em 16em 1em;
+  margin: 6em 20em 1em;
   color: #ffd15b;
   text-align: center;
+  font-size: 1.9em;
+  letter-spacing: 1px;
 }
 
 .container-search {
@@ -61,7 +72,6 @@ h4 {
   height: 72px;
   border-radius: 11px;
   background-color: #e7e7e7;
-  padding-top: 7px;
   padding-left: 22px;
   border: none;
 }
@@ -74,7 +84,7 @@ h4 {
 .searchBtn {
   position: relative;
   right: 80px;
-  bottom: 5px;
+  top: 20px;
   width: 51px;
   height: 52px;
   cursor: pointer;
@@ -96,9 +106,9 @@ h4 {
 .cancelBtn {
   position: relative;
   right: 100px;
-  bottom: 5px;
   cursor: text;
   opacity: 0;
+  top: 2px;
 }
 
 .visible {
@@ -154,16 +164,10 @@ h4 {
 .divInputFilter {
   display: none;
   position: relative;
+  margin-top: 15px;
 }
 .filterBlock.active .divInputFilter {
   display: block;
-}
-
-#filterIngredients.active,
-#filterDevices.active,
-#filterUstensiles.active {
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
 }
 
 .filterBlock i::before {
@@ -176,7 +180,6 @@ h4 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
-  padding: 0px 10px;
   column-gap: 30px;
   width: 100%;
   height: 100%;
@@ -217,6 +220,7 @@ h4 {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  padding-left: 5px;
 }
 
 .filterList p {
@@ -263,6 +267,9 @@ h4 {
 
 .inputFilter {
   margin-top: 5px;
+  width: 140px;
+  height: 36px;
+  padding: 0 10px;
 }
 
 .inputFilter::placeholder {
@@ -347,12 +354,12 @@ h4 {
 }
 
 .container__recipe-time {
-  width: 65px;
+  width: 55px;
   height: 26px;
   position: relative;
   background: #ffd15b;
   border-radius: 10px;
-  padding: 3px 0px 0px 10px;
+  padding: 3px 0px 5px 10px;
   bottom: 240px;
   left: 300px;
   z-index: 0;
@@ -382,7 +389,7 @@ h4 {
   font-size: 14px;
   font-weight: bold;
   border: none;
-  padding: 20px 15px;
+  padding: 22px 15px;
   border-radius: 10px;
   margin: 10px 33px 0px 0px;
   display: inline-block;
@@ -399,15 +406,20 @@ h4 {
 
 .cancelFilterBtn {
   position: absolute;
-  top: 14px;
-  left: 149px;
+  top: 19px;
+  left: 120px;
   cursor: pointer;
+  display: none;
+}
+
+.cancelFilterBtn.active {
+  display: block;
 }
 
 .searchFilterBtn {
   position: absolute;
-  top: 9px;
-  left: 164px;
+  top: 14px;
+  left: 136px;
   cursor: pointer;
 }
 

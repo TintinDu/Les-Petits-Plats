@@ -258,16 +258,28 @@ import {
     .querySelector("#inputIngredient")
     .addEventListener("input", () => {
       handleIngredientSearch(filteredRecipes);
+      document.querySelector("#cancelIngredient").addEventListener("click", () => {
+        document
+          .querySelector("#inputIngredient").value = "";
+      });
     });
   document
     .querySelector("#inputAppareil")
     .addEventListener("input", () => {
       handleApplianceSearch(filteredRecipes);
+      document.querySelector("#cancelAppliance").addEventListener("click", () => {
+        document
+          .querySelector("#inputAppliance").value = "";
+      });
     });
   document
     .querySelector("#inputUstensile")
     .addEventListener("input", () => {
       handleUstensilSearch(filteredRecipes);
+      document.querySelector("#cancelUstensil").addEventListener("click", () => {
+        document
+          .querySelector("#inputUstensil").value = "";
+      });
     });
 })();
 

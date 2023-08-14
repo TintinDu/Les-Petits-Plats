@@ -49,6 +49,10 @@ const getRecipes = async () => {
 const displayRecipes = (recipes) => {
   const recipesSection = document.querySelector(".recipes-section");
   recipesSection.innerHTML = "";
+  const header = document.createElement("h2");
+  header.className = "recipes-title-hidden";
+  header.innerText = "Nos recettes";
+  recipesSection.appendChild(header);
 
   recipes.forEach((recipe) => {
     const recipeCardDom = getRecipeCardDom(recipe);

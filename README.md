@@ -54,6 +54,5 @@ Ces points doivent absolument être respectés durant le développement:
 7. Comme pour le reste du site, le code HTML et CSS pour l’interface devra passer avec succès le validateur W3C. ??
 8. Aucune librairie ne sera utilisée pour le JavaScript du moteur de recherche. ✅
 
-TODO: Garder les filtres quand le champ recherche est réinitialisé ❌
 TODO: Maintenir le background color jaune et la petite croix de l'item sélectionné dans la liste ❌
-TODO: Parfois quand on retire un filtre, il n'est pas prix en compte ❌
+TODO: Parfois quand on retire un filtre, il n'est pas pris en compte ❌

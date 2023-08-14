@@ -216,6 +216,7 @@ h4 {
 .filterList div {
   width: 100%;
   display: flex;
+  justify-content: space-between;
 }
 
 .filterList p {
@@ -224,8 +225,7 @@ h4 {
 }
 
 .filterList img {
-  position: relative;
-  left: 55px;
+  margin-right: 20px;
 }
 
 .activeFilterDiv {

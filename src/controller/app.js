@@ -12,6 +12,8 @@ import {
   handleIngredientSearch,
   handleUstensilSearch,
   handleTag,
+  handleSelectedListElement,
+  removeTag,
 } from "./domUtils.js";
 import {
   initializeData,
@@ -26,8 +28,10 @@ import {
 // import service from "../models/service.js";
 
 (async () => {
+
   const recipes = await initializeData();
   let filteredRecipes = recipes;
+  const selectedFilterIds = [];
 
   // const ingredients = service.getIngredientsList(recipes);
   // const appliances = service.getAppliancesList(recipes);
@@ -40,6 +44,7 @@ import {
     initialize(filteredRecipes);
     initializeFilters(filteredRecipes);
   }
+
 
   document
     .querySelector("#search")
@@ -58,8 +63,13 @@ import {
 
       document
         .querySelector(".cancelBtn").addEventListener("click", async () => {
-          filteredRecipes = await handleCancel(recipes);
-          updateFilterLists(filteredRecipes);
+          if (!(document.querySelector(".tag"))) {
+            filteredRecipes = await handleCancel(recipes);
+            updateFilterLists(filteredRecipes);
+          } else {
+            filteredRecipes = await handleCancel(filteredRecipes);
+            updateFilterLists(filteredRecipes);
+          }
         });
     });
 
@@ -94,9 +104,11 @@ import {
     .addEventListener("click", () => {
       toggleFiltersList("devices", "display");
     });
-  document.querySelector("#hideDevicesList").addEventListener("click", () => {
-    toggleFiltersList("devices", "hide");
-  });
+  document
+    .querySelector("#hideDevicesList")
+    .addEventListener("click", () => {
+      toggleFiltersList("devices", "hide");
+    });
   document
     .querySelector("#displayUstensilesList")
     .addEventListener("click", () => {
@@ -110,19 +122,46 @@ import {
 
   document
     .querySelector("#ingredientsList")
-    .addEventListener("click", (event) => {
+    .addEventListener("click", async (event) => {
       const clickedListItem = event.target.closest("div");
-      if (clickedListItem.className !== "filterList") {
+      if (clickedListItem && clickedListItem.className !== "filterList") {
         filteredRecipes = handleTag(
           filteredRecipes,
           event,
           handleIngredientFilter,
           "ingredients",
         );
+
+        const filterId = handleSelectedListElement(
+          filteredRecipes,
+          event,
+          handleIngredientFilter,
+          "ingredients",
+        );
+
         updateFilterLists(filteredRecipes);
+        console.log(filterId);
+
+        const activeFilterDiv = document.querySelector(`[data-filter-id="${filterId}"]`);
+        if (activeFilterDiv) {
+          activeFilterDiv.classList.add("activeFilterDiv");
+          const uncheckFilter = document.createElement("img");
+          uncheckFilter.src = "./images/roundedCross.svg";
+          uncheckFilter.className = "uncheckFilter";
+          activeFilterDiv.appendChild(uncheckFilter);
+          if (uncheckFilter) {
+            uncheckFilter.addEventListener("click", () => {
+              activeFilterDiv.classList.remove("activeFilterDiv");
+              uncheckFilter.remove();
+              const tagText = activeFilterDiv.querySelector("p").innerText.trim();
+              removeTag(document.getElementById(`${tagText}`).parentElement, recipes);
+              toggleFiltersList("ingredients", "hide");
+            });
+          }
+        }
       }
-    },
-    );
+    });
+
   document
     .querySelector("#devicesList")
     .addEventListener("click", (event) => {
@@ -134,7 +173,33 @@ import {
           handleApplianceFilter,
           "devices",
         );
+
+        const filterId = handleSelectedListElement(
+          filteredRecipes,
+          event,
+          handleApplianceFilter,
+          "devices",
+        );
+
         updateFilterLists(filteredRecipes);
+
+        const activeFilterDiv = document.querySelector(`[data-filter-id="${filterId}"]`);
+        if (activeFilterDiv) {
+          activeFilterDiv.classList.add("activeFilterDiv");
+          const uncheckFilter = document.createElement("img");
+          uncheckFilter.src = "./images/roundedCross.svg";
+          uncheckFilter.className = "uncheckFilter";
+          activeFilterDiv.appendChild(uncheckFilter);
+          if (uncheckFilter) {
+            uncheckFilter.addEventListener("click", () => {
+              activeFilterDiv.classList.remove("activeFilterDiv");
+              uncheckFilter.remove();
+              const tagText = activeFilterDiv.querySelector("p").innerText.trim();
+              removeTag(document.getElementById(`${tagText}`).parentElement, recipes);
+              toggleFiltersList("devices", "hide");
+            });
+          }
+        }
       }}),
 
   document
@@ -148,7 +213,39 @@ import {
           handleUstensilFilter,
           "ustensiles",
         );
+        const filterId = handleSelectedListElement(
+          filteredRecipes,
+          event,
+          handleUstensilFilter,
+          "ustensiles",
+        );
+
         updateFilterLists(filteredRecipes);
+
+        if (selectedFilterIds.includes(filterId)) {
+          selectedFilterIds.splice(selectedFilterIds.indexOf(filterId), 1);
+        } else {
+          selectedFilterIds.push(filterId);
+        }
+
+        const activeFilterDiv = document.querySelector(`[data-filter-id="${filterId}"]`);
+        if (activeFilterDiv) {
+          activeFilterDiv.classList.add("activeFilterDiv");
+          const uncheckFilter = document.createElement("img");
+          uncheckFilter.src = "./images/roundedCross.svg";
+          uncheckFilter.className = "uncheckFilter";
+          activeFilterDiv.appendChild(uncheckFilter);
+          if (uncheckFilter) {
+            uncheckFilter.addEventListener("click", () => {
+              activeFilterDiv.classList.remove("activeFilterDiv");
+              uncheckFilter.remove();
+              const tagText = activeFilterDiv.querySelector("p").innerText.trim();
+              removeTag(document.getElementById(`${tagText}`).parentElement, recipes);
+              toggleFiltersList("ustensiles", "hide");
+              selectedFilterIds.splice(selectedFilterIds.indexOf(filterId), 1);
+            });
+          }
+        }
       }}),
 
   document
@@ -166,5 +263,4 @@ import {
     .addEventListener("input", () => {
       handleUstensilSearch(filteredRecipes);
     });
-
 })();

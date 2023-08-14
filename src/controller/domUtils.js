@@ -1,4 +1,3 @@
-// Toutes les manipulations du DOM et les rendus de fonctions ici (lien avec la vue)
 import {
   filterRecipe,
   toggleFiltersList,
@@ -25,11 +24,18 @@ export const handleSearch = (recipes) => {
   const searchValue = searchBar.value.toLowerCase().trim();
   noResultsDiv.textContent = "";
   cancelBtn.classList.add("visible");
+  let filteredRecipes;
 
   const searchWords = searchValue.split(" ").filter((word) => word);
-  const filteredRecipes = recipes.filter((recipe) =>
-    filterRecipe(searchWords, recipe),
-  );
+  if (document.querySelector(".tag")) {
+    filteredRecipes = recipes.filter((recipe) =>
+      filterRecipe(searchWords, recipe),
+    );
+  } else {
+    filteredRecipes = recipes.filter((recipe) =>
+      filterRecipe(searchWords, recipe),
+    );
+  }
 
   if (filteredRecipes.length === 0) {
     noResults(searchValue);
@@ -39,7 +45,6 @@ export const handleSearch = (recipes) => {
   updateFilterLists(filteredRecipes);
   initialize(filteredRecipes);
   initializeFilters(filteredRecipes);
-  // appeler les fonctions de tri autres avec le nouveau tableau
   return filteredRecipes;
 };
 
@@ -73,29 +78,18 @@ export const handleUstensilSearch = (recipes) => {
   return displayFilteredList(filteredUstensils, ustensilesList);
 };
 
-export const handleTag = (recipes, event, handleFilterFunction, filters) => {
+export const handleTag = (recipes, event, handleFilterFunction, filterType) => {
   const clickedListItem = event.target.closest("div");
   if (clickedListItem) {
     const inputValue = clickedListItem.textContent.trim();
     let filteredRecipes = handleFilterFunction(inputValue, recipes);
     const closeTagBtn = displayTags(inputValue, filteredRecipes);
-    closeTagBtn.addEventListener("click", (event) => {
-      console.log(filteredRecipes);
-      if(document.querySelector(".activeFilterDiv")){
-        document.querySelector(".activeFilterDiv").className = "";
-      }
-      if(document.querySelector(".uncheckFilter")) {
-        document.querySelector(".uncheckFilter").remove();
-      }
-      filteredRecipes = removeTag(event.target.parentElement, recipes);
-      handleFilterFunction("", recipes);
-    });
-    toggleFiltersList(filters, "hide");
-    return filteredRecipes;
+    toggleFiltersList(filterType, "hide");
+    return closeTagBtn;
   }
 };
 
-export const handleSelectedListElement = (recipes, event, handleFilterFunction, filters) => {
+export const handleSelectedListElement = (event) => {
   const clickedListItem = event.target.closest("div");
   if (clickedListItem) {
     const filterId = clickedListItem.getAttribute("data-filter-id");
@@ -105,13 +99,6 @@ export const handleSelectedListElement = (recipes, event, handleFilterFunction, 
     clickedListItem.appendChild(uncheckFilter);
     clickedListItem.classList.add("activeFilterDiv");
 
-    uncheckFilter.addEventListener("click", () => {
-      clickedListItem.classList.remove("activeFilterDiv");
-      uncheckFilter.remove();
-      removeTag(document.getElementById(`${clickedListItem.firstChild.textContent}`).parentElement, recipes);
-      toggleFiltersList(filters, "hide");
-      handleFilterFunction("", recipes);
-    });
     return filterId;
   }
 };
@@ -201,7 +188,6 @@ export const displayTags = (inputValue) => {
 
 export const removeTag = async (tag, recipes) => {
   tag.innerHTML = "";
-  // initializeFilters(recipes);
   const filteredRecipes = initialize(recipes);
   updateFilterLists(recipes);
 
@@ -211,6 +197,7 @@ export const removeTag = async (tag, recipes) => {
     updateFilterLists(reinitializedRecipes);
     return reinitializedRecipes;
   }
+
 
   return filteredRecipes;
 

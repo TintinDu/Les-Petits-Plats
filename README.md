@@ -51,5 +51,5 @@ Ces points doivent absolument être respectés durant le développement:
 4. La recherche principale affiche les premiers résultats le plus rapidement possible. ✅
 5. Les champs ingrédients, ustensiles et appareil de la recherche avancée proposent seulement les éléments restant dans les recettes présentes sur la page. ✅
 6. Les retours de recherche doivent être une intersection des résultats. Si l’on ajoute les tags “coco” et “chocolat” dans les ingrédients, on doit récupérer les recettes qui ont à la fois de la coco et du chocolat. ✅
-7. Comme pour le reste du site, le code HTML et CSS pour l’interface devra passer avec succès le validateur W3C. ??
+7. Comme pour le reste du site, le code HTML et CSS pour l’interface devra passer avec succès le validateur W3C. ✅
 8. Aucune librairie ne sera utilisée pour le JavaScript du moteur de recherche. ✅

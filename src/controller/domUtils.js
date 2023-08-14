@@ -47,6 +47,8 @@ export const handleIngredientSearch = (recipes) => {
     .querySelector("#inputIngredient")
     .value.toLowerCase()
     .trim();
+  const cancelFilterBtn = document.querySelector("#cancelIngredient");
+  searchValue ? cancelFilterBtn.classList.add("active") : cancelFilterBtn.classList.remove("active");
   const ingredientsList = document.querySelector("#ingredientsList");
   const filteredIngredients = searchIngredient(searchValue, service.getIngredientsList(recipes));
   return displayFilteredList(filteredIngredients, ingredientsList);
@@ -57,6 +59,8 @@ export const handleApplianceSearch = (recipes) => {
     .querySelector("#inputAppareil")
     .value.toLowerCase()
     .trim();
+  const cancelFilterBtn = document.querySelector("#cancelAppliance");
+  searchValue ? cancelFilterBtn.classList.add("active") : cancelFilterBtn.classList.remove("active");
   const appliancesList = document.querySelector("#devicesList");
   const filteredAppliances = searchAppliance( searchValue, service.getAppliancesList(recipes));
   return displayFilteredList(filteredAppliances, appliancesList);
@@ -67,6 +71,8 @@ export const handleUstensilSearch = (recipes) => {
     .querySelector("#inputUstensile")
     .value.toLowerCase()
     .trim();
+  const cancelFilterBtn = document.querySelector("#cancelUstensil");
+  searchValue ? cancelFilterBtn.classList.add("active") : cancelFilterBtn.classList.remove("active");
   const ustensilesList = document.querySelector("#ustensilesList");
   const filteredUstensils = searchUstensil(searchValue, service.getUstensilsList(recipes));
   return displayFilteredList(filteredUstensils, ustensilesList);

@@ -40,7 +40,7 @@ import {
         .value.toLowerCase()
         .trim();
       if (searchValue.length >= 3) {
-        filteredRecipes = handleSearch(filteredRecipes, document.querySelectorAll(".tag"));
+        filteredRecipes = handleSearch(filteredRecipes);
       } else if (searchValue.length < 3) {
         document.querySelector(".noResults").textContent = "";
         initialize(filteredRecipes);
@@ -111,12 +111,14 @@ import {
     .addEventListener("click", async (event) => {
       const clickedListItem = event.target.closest("div");
       if (clickedListItem && clickedListItem.className !== "filterList") {
-        const closeTagBtn = handleTag(
+        let {closeTagBtn, newRecipes} = handleTag(
           filteredRecipes,
           event,
           handleIngredientFilter,
           "ingredients",
         );
+
+        filteredRecipes = newRecipes;
 
         const filterId = handleSelectedListElement(
           event,
@@ -159,12 +161,14 @@ import {
     .addEventListener("click", (event) => {
       const clickedListItem = event.target.closest("div");
       if (clickedListItem && clickedListItem.className !== "filterList") {
-        const closeTagBtn = handleTag(
+        let {closeTagBtn, newRecipes} = handleTag(
           filteredRecipes,
           event,
           handleApplianceFilter,
           "devices",
         );
+
+        filteredRecipes = newRecipes;
 
         const filterId = handleSelectedListElement(
           event,
@@ -206,12 +210,15 @@ import {
     .addEventListener("click", (event) => {
       const clickedListItem = event.target.closest("div");
       if (clickedListItem && clickedListItem.className !== "filterList") {
-        const closeTagBtn = handleTag(
+        let {closeTagBtn, newRecipes} = handleTag(
           filteredRecipes,
           event,
           handleUstensilFilter,
           "ustensiles",
         );
+
+        filteredRecipes = newRecipes;
+
         const filterId = handleSelectedListElement(
           event,
         );

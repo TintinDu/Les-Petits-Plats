@@ -24,18 +24,12 @@ export const handleSearch = (recipes) => {
   const searchValue = searchBar.value.toLowerCase().trim();
   noResultsDiv.textContent = "";
   cancelBtn.classList.add("visible");
-  let filteredRecipes;
 
   const searchWords = searchValue.split(" ").filter((word) => word);
-  if (document.querySelector(".tag")) {
-    filteredRecipes = recipes.filter((recipe) =>
-      filterRecipe(searchWords, recipe),
-    );
-  } else {
-    filteredRecipes = recipes.filter((recipe) =>
-      filterRecipe(searchWords, recipe),
-    );
-  }
+  const filteredRecipes = recipes.filter((recipe) =>
+    filterRecipe(searchWords, recipe),
+  );
+
 
   if (filteredRecipes.length === 0) {
     noResults(searchValue);
@@ -82,10 +76,10 @@ export const handleTag = (recipes, event, handleFilterFunction, filterType) => {
   const clickedListItem = event.target.closest("div");
   if (clickedListItem) {
     const inputValue = clickedListItem.textContent.trim();
-    let filteredRecipes = handleFilterFunction(inputValue, recipes);
-    const closeTagBtn = displayTags(inputValue, filteredRecipes);
+    let newRecipes = handleFilterFunction(inputValue, recipes);
+    const closeTagBtn = displayTags(inputValue, newRecipes);
     toggleFiltersList(filterType, "hide");
-    return closeTagBtn;
+    return {closeTagBtn, newRecipes};
   }
 };
 

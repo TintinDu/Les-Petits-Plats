@@ -54,10 +54,12 @@ const displayRecipes = (recipes) => {
   header.innerText = "Nos recettes";
   recipesSection.appendChild(header);
 
-  recipes.forEach((recipe) => {
+  for (let index = 0; index < recipes.length; index++) {
+    const recipe = recipes[index];
     const recipeCardDom = getRecipeCardDom(recipe);
     recipesSection.appendChild(recipeCardDom);
-  });
+  }
+
   getRecipesNumbers(recipes);
 };
 

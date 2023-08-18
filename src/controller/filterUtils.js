@@ -2,9 +2,14 @@ import service from "../models/service.js";
 
 export const filterRecipe = (searchWords, recipe) => {
 
-  const lowerCaseIngredients = recipe.ingredients.map((ingredient) =>
-    ingredient.ingredient.toLowerCase(),
-  );
+  let ingredientsArrObj = recipe.ingredients;
+  let lowerCaseIngredients = [];
+
+  for (let index = 0; index < ingredientsArrObj.length; index++) {
+    const ingredient = ingredientsArrObj[index];
+    lowerCaseIngredients.push(ingredient.ingredient.toLowerCase());
+  }
+
   const lowerCaseTitle = recipe.name.toLowerCase();
   const lowerCaseDescription = recipe.description.toLowerCase();
 
@@ -32,23 +37,45 @@ export const filterRecipe = (searchWords, recipe) => {
 };
 
 const searchWithCombinedIngredients = (searchWords, ingredients) => {
-  return searchWords.every((word) =>
-    ingredients.some((ingredient) => ingredient.includes(word)),
-  );
+  for (let searchIndex = 0; searchIndex < searchWords.length; searchIndex++) {
+    const word = searchWords[searchIndex];
+    let found = false;
+    for (let ingredientIndex = 0; ingredientIndex < ingredients.length; ingredientIndex++) {
+      const ingredient = ingredients[ingredientIndex];
+      if (ingredient.includes(word)) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      return false;
+    }
+  }
+  return true;
 };
 
 const searchWithTitle = (searchWords, title) => {
-  return searchWords.every((word) => title.includes(word));
+  for (let index = 0; index < searchWords.length; index++) {
+    const word = searchWords[index];
+    return title.includes(word);
+  }
 };
 
 const searchWithDescription = (searchWords, description) => {
-  return searchWords.every((word) => description.includes(word));
+  for (let index = 0; index < searchWords.length; index++) {
+    const word = searchWords[index];
+    return description.includes(word);
+  }
 };
 
 const searchWithIngredients = (searchWords, ingredients) => {
-  return searchWords.every((word) =>
-    ingredients.some((ingredient) => ingredient.includes(word)),
-  );
+  for (let index = 0; index < searchWords.length; index++) {
+    const word = searchWords[index];
+    for (let index = 0; index < ingredients.length; index++) {
+      const ingredient = ingredients[index];
+      return ingredient.includes(word);
+    }
+  }
 };
 
 const filterRecipesBySelectedIngredient = (selectedIngredient, recipes) => {

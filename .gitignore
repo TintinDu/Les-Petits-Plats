@@ -3,3 +3,4 @@
 *node_modules
 *drawio
 *.vscode
+*mock

@@ -25,10 +25,19 @@ export const handleSearch = (recipes) => {
   noResultsDiv.textContent = "";
   cancelBtn.classList.add("visible");
 
-  const searchWords = searchValue.split(" ").filter((word) => word);
-  const filteredRecipes = recipes.filter((recipe) =>
-    filterRecipe(searchWords, recipe),
-  );
+  let searchWords = [];
+  const searchWordsArr = searchValue.split(" ");
+
+  for (let index = 0; index < searchWordsArr.length; index++) {
+    const word = searchWordsArr[index];
+    searchWords.push(word);
+  }
+
+  let filteredRecipes = [];
+  for (let index = 0; index < recipes.length; index++) {
+    const recipe = recipes[index];
+    filterRecipe(searchWords, recipe) ? filteredRecipes.push(recipe) : "";
+  }
 
 
   if (filteredRecipes.length === 0) {
